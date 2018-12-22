@@ -1,5 +1,4 @@
 import 'package:fifteenpuzzle/utils/state.dart';
-import 'package:fifteenpuzzle/widgets/board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,8 +15,7 @@ class GamePlayStopButton extends StatefulWidget {
   _GamePlayStopButtonState createState() => _GamePlayStopButtonState();
 }
 
-class _GamePlayStopButtonState
-    extends AutoDisposableState<GamePlayStopButton> {
+class _GamePlayStopButtonState extends AutoDisposableState<GamePlayStopButton> {
   @override
   void initState() {
     listenTo(widget.presenter.isPlaying.stream);
@@ -76,6 +74,8 @@ class _GameStopwatchWidgetState extends AutoDisposableState<GameStopwatchWidget>
 
   @override
   Widget build(BuildContext context) {
+    final isLargeScreen = MediaQuery.of(context).size.width > 600;
+
     final time = widget.presenter.elapsedTime.value;
     final timeFormatted = _formatElapsedTime(time * 100);
     return AnimatedBuilder(
@@ -90,7 +90,7 @@ class _GameStopwatchWidgetState extends AutoDisposableState<GameStopwatchWidget>
       child: Text(
         timeFormatted,
         style: Theme.of(context).textTheme.display3.copyWith(
-              fontSize: 72.0,
+              fontSize: isLargeScreen ? 72.0 : 48.0,
               color: Theme.of(context).textTheme.title.color,
             ),
       ),

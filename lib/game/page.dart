@@ -18,6 +18,8 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = AppStateContainer.of(context).game;
 
+    final isLargeScreen = MediaQuery.of(context).size.width > 600;
+
     final fabWidget = _buildFab(context);
     final boardWidget = _buildBoard(context);
     return OrientationBuilder(builder: (context, orientation) {
@@ -47,29 +49,33 @@ class GamePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 56,
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const AppIcon(size: 24.0),
-                        const SizedBox(width: 16.0),
-                        Text(
-                          title,
-                          style: Theme.of(context).textTheme.title,
+                isLargeScreen
+                    ? Container(
+                        height: 56,
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              const AppIcon(size: 24.0),
+                              const SizedBox(width: 16.0),
+                              Text(
+                                title,
+                                style: Theme.of(context).textTheme.title,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      )
+                    : const SizedBox(height: 0),
                 Expanded(
                   child: Center(
                     child: statusWidget,
                   ),
                 ),
                 boardWidget,
-                const SizedBox(height: 116.0),
+                isLargeScreen
+                    ? const SizedBox(height: 116.0)
+                    : const SizedBox(height: 72.0),
               ],
             ),
           ),
