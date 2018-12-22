@@ -13,9 +13,7 @@ class AppIcon extends StatelessWidget {
       width: size,
       height: size,
       child: Material(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        ),
+        shape: CircleBorder(),
         elevation: 4.0,
         color: Theme.of(context).primaryColor,
         child: Center(
@@ -23,7 +21,7 @@ class AppIcon extends StatelessWidget {
             '15',
             style: Theme.of(context).primaryTextTheme.title.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: 16.0,
+              fontSize: 14.0,
             ),
           ),
         ),

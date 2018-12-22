@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Game of Fifteen',
       debugShowMaterialGrid: false,
       showPerformanceOverlay: false,
       theme: theme.copyWith(

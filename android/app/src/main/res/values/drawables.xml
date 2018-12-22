@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <drawable name="icon_background">#FF2196F3</drawable>
+    <drawable name="launch_background">@color/color_background</drawable>
+
+</resources>
