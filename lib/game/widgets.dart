@@ -39,7 +39,9 @@ class _GamePlayStopButtonState extends AutoDisposableState<GamePlayStopButton> {
 class GameStopwatchWidget extends StatefulWidget {
   final GamePresenter presenter;
 
-  GameStopwatchWidget(this.presenter);
+  final double fontSize;
+
+  GameStopwatchWidget(this.presenter, {@required this.fontSize});
 
   @override
   _GameStopwatchWidgetState createState() => _GameStopwatchWidgetState();
@@ -74,8 +76,6 @@ class _GameStopwatchWidgetState extends AutoDisposableState<GameStopwatchWidget>
 
   @override
   Widget build(BuildContext context) {
-    final isLargeScreen = MediaQuery.of(context).size.width > 600;
-
     final time = widget.presenter.elapsedTime.value;
     final timeFormatted = _formatElapsedTime(time * 100);
     return AnimatedBuilder(
@@ -90,7 +90,7 @@ class _GameStopwatchWidgetState extends AutoDisposableState<GameStopwatchWidget>
       child: Text(
         timeFormatted,
         style: Theme.of(context).textTheme.display3.copyWith(
-              fontSize: isLargeScreen ? 72.0 : 48.0,
+              fontSize: widget.fontSize,
               color: Theme.of(context).textTheme.title.color,
             ),
       ),

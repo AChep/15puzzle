@@ -18,7 +18,18 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = AppStateContainer.of(context).game;
 
-    final isLargeScreen = MediaQuery.of(context).size.width > 600;
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? screenSize.width
+            : screenSize.height;
+    final screenHeight =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? screenSize.height
+            : screenSize.width;
+
+    final isTallScreen = screenHeight / screenWidth > 1.9;
+    final isLargeScreen = screenWidth > 400;
 
     final fabWidget = _buildFab(context);
     final boardWidget = _buildBoard(context);
@@ -29,7 +40,12 @@ class GamePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              GameStopwatchWidget(presenter),
+              GameStopwatchWidget(
+                presenter,
+                fontSize: orientation == Orientation.landscape && !isLargeScreen
+                    ? 56.0
+                    : 72.0,
+              ),
               const SizedBox(width: 16.0),
               Icon(
                 Icons.access_time,
@@ -49,7 +65,7 @@ class GamePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                isLargeScreen
+                isTallScreen
                     ? Container(
                         height: 56,
                         child: Center(
@@ -73,7 +89,7 @@ class GamePage extends StatelessWidget {
                   ),
                 ),
                 boardWidget,
-                isLargeScreen
+                isLargeScreen && isTallScreen
                     ? const SizedBox(height: 116.0)
                     : const SizedBox(height: 72.0),
               ],
