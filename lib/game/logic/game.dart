@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'board.dart';
-import 'chip.dart';
+import 'package:fifteenpuzzle/data/board.dart';
+import 'package:fifteenpuzzle/data/chip.dart';
 
 class Game {
   /// Current board that is shown to a user. The

@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:fifteenpuzzle/game/sheets.dart';
-import 'package:fifteenpuzzle/game/widgets_board.dart';
+import 'package:fifteenpuzzle/widgets/game/board.dart';
 import 'package:fifteenpuzzle/main.dart';
+import 'package:fifteenpuzzle/providers.dart';
 import 'package:fifteenpuzzle/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

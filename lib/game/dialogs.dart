@@ -1,4 +1,4 @@
-import 'package:fifteenpuzzle/result.dart';
+import 'package:fifteenpuzzle/data/result.dart';
 import 'package:flutter/material.dart';
 
 AlertDialog createVictoryDialog(BuildContext context, Result result) {

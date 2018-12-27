@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:fifteenpuzzle/utils/serializable.dart';
+
 import 'chip.dart';
 
-class Board {
+class Board extends Serializable {
   /// Width and height of a board, for
   /// example 4x4.
   final int size;
@@ -29,5 +31,22 @@ class Board {
       if (chip.targetPoint != chip.currentPoint) return false;
     }
     return true;
+  }
+
+  @override
+  void serialize(SerializeOutput output) {
+    output.writeInt(size);
+    output.writeInt(blank.x);
+    output.writeInt(blank.y);
+
+    for (final chip in chips) {
+
+    }
+  }
+
+  @override
+  deserialize(SerializeInput input) {
+    // TODO: implement deserialize
+    return null;
   }
 }

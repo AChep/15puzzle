@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:fifteenpuzzle/game/logic/board.dart';
+import 'package:fifteenpuzzle/data/board.dart';
 import 'package:fifteenpuzzle/game/logic/game.dart';
-import 'package:fifteenpuzzle/result.dart';
+import 'package:fifteenpuzzle/data/result.dart';
 import 'package:rxdart/subjects.dart';
 
 class GamePresenter {

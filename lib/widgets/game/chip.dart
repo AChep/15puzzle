@@ -1,4 +1,4 @@
-import 'package:fifteenpuzzle/game/logic/chip.dart';
+import 'package:fifteenpuzzle/data/chip.dart';
 import 'package:flutter/material.dart' hide Chip;
 
 class ChipWidget extends StatelessWidget {
