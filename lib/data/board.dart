@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fifteenpuzzle/data/point.dart';
 import 'package:fifteenpuzzle/utils/serializable.dart';
 
 import 'chip.dart';
@@ -36,17 +37,44 @@ class Board extends Serializable {
   @override
   void serialize(SerializeOutput output) {
     output.writeInt(size);
-    output.writeInt(blank.x);
-    output.writeInt(blank.y);
+    output.writeSerializable(PointSerializableWrapper(blank));
 
     for (final chip in chips) {
-
+      output.writeSerializable(chip);
     }
   }
+}
+
+class BoardDeserializableFactory extends DeserializableHelper<Board> {
+  const BoardDeserializableFactory() : super();
 
   @override
-  deserialize(SerializeInput input) {
-    // TODO: implement deserialize
-    return null;
+  Board deserialize(SerializeInput input) {
+    final size = input.readInt();
+    if (size == null) {
+      return null;
+    }
+
+    const pointFactory = PointDeserializableFactory();
+    const chipFactory = ChipDeserializableFactory();
+
+    final blank = input.readDeserializable(pointFactory);
+    if (blank == null) {
+      return null;
+    }
+
+    final chips = List<Chip>();
+    final length = size * size - 1;
+    for (var i = 0; i < length; i++) {
+      final chip = input.readDeserializable(chipFactory);
+      if (chip == null) {
+        return null;
+      }
+
+      chips.add(chip);
+    }
+
+    // TODO: Verify if the loaded data is valid
+    return Board(size, chips, blank);
   }
 }

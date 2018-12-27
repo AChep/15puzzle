@@ -6,6 +6,8 @@ abstract class Serializable {
 }
 
 abstract class DeserializableHelper<T> {
+  const DeserializableHelper();
+
   T deserialize(SerializeInput input);
 }
 
@@ -99,5 +101,4 @@ class SharedPrefSerializeInput extends SerializeInput {
 
     return block(prefs, key);
   }
-
 }

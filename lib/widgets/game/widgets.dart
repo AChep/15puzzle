@@ -2,8 +2,6 @@ import 'package:fifteenpuzzle/utils/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'presenter.dart';
-
 /// Widget that can start / stop
 /// a game.
 class GamePlayStopButton extends StatefulWidget {

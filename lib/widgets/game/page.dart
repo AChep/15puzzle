@@ -1,33 +1,49 @@
+import 'dart:io';
 import 'dart:math';
 
-import 'package:fifteenpuzzle/game/sheets.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
-import 'package:fifteenpuzzle/main.dart';
-import 'package:fifteenpuzzle/providers.dart';
+import 'package:fifteenpuzzle/widgets/game/runner.dart';
 import 'package:fifteenpuzzle/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'widgets.dart';
-
 class GamePage extends StatelessWidget {
-  GamePage({Key key, this.title}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final rootWidget = _buildRoot(context);
+    return GameRunnerWidget(
+      child: rootWidget,
+    );
+  }
 
-  final String title;
+  Widget _buildRoot(BuildContext context) {
+    final BoardWidget boardWidget = null;
+    if (Platform.isIOS) {
+      return _GameCupertinoPage(boardWidget: boardWidget);
+    } else {
+      // Every other OS is based on a material
+      // design application.
+      return _GameMaterialPage(boardWidget: boardWidget);
+    }
+  }
+}
+
+class _GameMaterialPage extends StatelessWidget {
+  final BoardWidget boardWidget;
+
+  _GameMaterialPage({@required this.boardWidget});
 
   @override
   Widget build(BuildContext context) {
-    final presenter = AppStateContainer.of(context).game;
-
     final screenSize = MediaQuery.of(context).size;
     final screenWidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? screenSize.width
-            : screenSize.height;
+    MediaQuery.of(context).orientation == Orientation.portrait
+        ? screenSize.width
+        : screenSize.height;
     final screenHeight =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? screenSize.height
-            : screenSize.width;
+    MediaQuery.of(context).orientation == Orientation.portrait
+        ? screenSize.height
+        : screenSize.width;
 
     final isTallScreen = screenHeight / screenWidth > 1.9;
     final isLargeScreen = screenWidth > 400;
@@ -41,19 +57,19 @@ class GamePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              GameStopwatchWidget(
-                presenter,
-                fontSize: orientation == Orientation.landscape && !isLargeScreen
-                    ? 56.0
-                    : 72.0,
-              ),
+//              GameStopwatchWidget(
+//                presenter,
+//                fontSize: orientation == Orientation.landscape && !isLargeScreen
+//                    ? 56.0
+//                    : 72.0,
+//              ),
               const SizedBox(width: 16.0),
               Icon(
                 Icons.access_time,
               ),
             ],
           ),
-          GameStepsWidget(presenter),
+//          GameStepsWidget(presenter),
         ],
       );
 
@@ -68,21 +84,21 @@ class GamePage extends StatelessWidget {
               children: <Widget>[
                 isTallScreen
                     ? Container(
-                        height: 56,
-                        child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const AppIcon(size: 24.0),
-                              const SizedBox(width: 16.0),
-                              Text(
-                                title,
-                                style: Theme.of(context).textTheme.title,
-                              ),
-                            ],
-                          ),
+                  height: 56,
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const AppIcon(size: 24.0),
+                        const SizedBox(width: 16.0),
+                        Text(
+                          'Game of Fifteen',
+                          style: Theme.of(context).textTheme.title,
                         ),
-                      )
+                      ],
+                    ),
+                  ),
+                )
                     : const SizedBox(height: 0),
                 Expanded(
                   child: Center(
@@ -97,7 +113,7 @@ class GamePage extends StatelessWidget {
             ),
           ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          FloatingActionButtonLocation.centerFloat,
           floatingActionButton: fabWidget,
         );
       } else {
@@ -119,9 +135,7 @@ class GamePage extends StatelessWidget {
       }
     });
   }
-
   Widget _buildBoard(final BuildContext context) {
-    final presenter = AppStateContainer.of(context).game;
     final background = Theme.of(context).brightness == Brightness.dark
         ? Colors.black54
         : Colors.black12;
@@ -137,7 +151,7 @@ class GamePage extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
             final puzzleSize = min(constraints.maxWidth, constraints.maxHeight);
             return BoardWidget(
-              game: presenter.game,
+              board: null,
               size: puzzleSize,
             );
           },
@@ -147,12 +161,11 @@ class GamePage extends StatelessWidget {
   }
 
   Widget _buildFab(final BuildContext context) {
-    final presenter = AppStateContainer.of(context).game;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         const SizedBox(width: 64.0),
-        GamePlayStopButton(presenter),
+//        GamePlayStopButton(presenter),
         const SizedBox(width: 16.0),
         Container(
           width: 48,
@@ -165,12 +178,12 @@ class GamePage extends StatelessWidget {
               onTap: () {
                 // Show the modal bottom sheet on
                 // tap on "More" icon.
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return createMoreBottomSheet(context);
-                  },
-                );
+//                showModalBottomSheet<void>(
+//                  context: context,
+//                  builder: (BuildContext context) {
+//                    return createMoreBottomSheet(context);
+//                  },
+//                );
               },
               customBorder: CircleBorder(),
               child: Icon(Icons.more_vert),
@@ -179,5 +192,16 @@ class GamePage extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _GameCupertinoPage extends StatelessWidget {
+  final BoardWidget boardWidget;
+
+  _GameCupertinoPage({@required this.boardWidget});
+
+  @override
+  Widget build(BuildContext context) {
+    return null;
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 Widget createMoreBottomSheet(BuildContext context) {
-  final state = AppStateContainer.of(context);
+//  final state = AppStateContainer.of(context);
 
   Widget createSeparator(String text) => Padding(
         padding: const EdgeInsets.all(16),

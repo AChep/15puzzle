@@ -1,51 +1,42 @@
 import 'dart:math';
 
-import 'package:rxdart/rxdart.dart';
-
 import 'package:fifteenpuzzle/data/board.dart';
 import 'package:fifteenpuzzle/data/chip.dart';
+import 'package:meta/meta.dart';
 
-class Game {
-  /// Current board that is shown to a user. The
-  /// board can be changed in runtime.
-  final board = BehaviorSubject<Board>();
-
-  final Function onTap;
-
-  final Function onSolve;
-
-  Game({this.onTap, this.onSolve, Board board}) {
-    if (board != null) {
-      this.board.value = board;
-    }
-
-    this.board.stream.listen((board) {
-      // Every time check if the board is in solved
-      // state now.
-      if (board.isSolved()) onSolve?.call();
-    });
-  }
+abstract class Game {
+  static Game instance = _GameImpl();
 
   /// Randomly shuffles the chips on a board, for
   /// a given amount of times.
-  void shuffle({final int amount = 300}) {
-    final boardOld = this.board.value;
+  Board shuffle(Board board, {int amount = 300});
+
+  Board tap(Board board, {@required Point<int> point});
+
+  /// Returns the chips that are free to move,
+  /// including a chip at the point.
+  Iterable<Chip> findChips(Board board, {@required Point<int> point});
+}
+
+class _GameImpl implements Game {
+  @override
+  Board shuffle(Board board, {int amount = 300}) {
     final random = Random();
 
-    List<List<Chip>> matrix = List.generate(boardOld.size, (i) {
-      return List.generate(boardOld.size, (j) {
+    List<List<Chip>> matrix = List.generate(board.size, (i) {
+      return List.generate(board.size, (j) {
         return null;
       });
     });
 
-    boardOld.chips.forEach((chip) {
+    board.chips.forEach((chip) {
       final pos = chip.currentPoint;
       matrix[pos.x][pos.y] = chip;
     });
 
     // Perform the shuffling
-    var blankX = boardOld.blank.x;
-    var blankY = boardOld.blank.y;
+    var blankX = board.blank.x;
+    var blankY = board.blank.y;
     for (var n = 0; n < amount; n++) {
       var x = blankX;
       var y = blankY;
@@ -67,7 +58,7 @@ class Game {
           break;
       }
 
-      if (x < 0 || x >= boardOld.size || y < 0 || y >= boardOld.size) {
+      if (x < 0 || x >= board.size || y < 0 || y >= board.size) {
         // We can not get out of the board.
         continue;
       }
@@ -81,9 +72,9 @@ class Game {
 
     // Apply new chips positions
     final blank = Point(blankX, blankY);
-    final chips = List.of(boardOld.chips, growable: false);
-    for (var x = 0; x < boardOld.size; x++) {
-      for (var y = 0; y < boardOld.size; y++) {
+    final chips = List.of(board.chips, growable: false);
+    for (var x = 0; x < board.size; x++) {
+      for (var y = 0; y < board.size; y++) {
         final chip = matrix[x][y];
         if (chip != null) {
           chips[chip.number] = chip.move(Point(x, y));
@@ -91,41 +82,34 @@ class Game {
       }
     }
 
-    board.value = Board(boardOld.size, chips, blank);
+    return Board(board.size, chips, blank);
   }
 
-  void tap(final Point<int> point) {
-    final boardOld = this.board.value;
-
+  @override
+  Board tap(Board board, {Point<int> point}) {
     int dx;
     int dy;
-    if (point.x == boardOld.blank.x) {
+    if (point.x == board.blank.x) {
       dx = 0;
-      dy = point.y > boardOld.blank.y ? -1 : 1;
-    } else if (point.y == boardOld.blank.y) {
-      dx = point.x > boardOld.blank.x ? -1 : 1;
+      dy = point.y > board.blank.y ? -1 : 1;
+    } else if (point.y == board.blank.y) {
+      dx = point.x > board.blank.x ? -1 : 1;
       dy = 0;
     } else {
-      return;
+      return board;
     }
 
     final blank = point;
-    final chips = List.of(boardOld.chips, growable: false);
-    findChips(point).forEach((chip) {
+    final chips = List.of(board.chips, growable: false);
+    findChips(board, point: point).forEach((chip) {
       chips[chip.number] = chip.move(chip.currentPoint + Point(dx, dy));
-      print('ahahahahaha');
-    }
-        );
+    });
 
-    onTap?.call();
-
-    board.value = Board(boardOld.size, chips, blank);
+    return Board(board.size, chips, blank);
   }
 
-  /// Returns the chips that are free to move,
-  /// including a chip at the point.
-  Iterable<Chip> findChips(Point<int> point) {
-    final board = this.board.value;
+  @override
+  Iterable<Chip> findChips(Board board, {Point<int> point}) {
     if (point.x == board.blank.x) {
       int start;
       int end;
@@ -161,9 +145,5 @@ class Game {
     } else {
       return Iterable.empty();
     }
-  }
-
-  void dispose() {
-    board.close();
   }
 }

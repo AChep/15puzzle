@@ -4,7 +4,7 @@ import 'package:fifteenpuzzle/utils/serializable.dart';
 
 import 'point.dart';
 
-class Chip {
+class Chip implements Serializable {
   /// Unique identifier of a chip, starts
   /// from a zero.
   final int number;
@@ -20,12 +20,21 @@ class Chip {
   );
 
   Chip move(Point<int> point) => Chip(number, targetPoint, point);
+
+  @override
+  void serialize(SerializeOutput output) {
+    output.writeInt(number);
+    output.writeSerializable(PointSerializableWrapper(targetPoint));
+    output.writeSerializable(PointSerializableWrapper(currentPoint));
+  }
 }
 
 class ChipDeserializableFactory extends DeserializableHelper<Chip> {
+  const ChipDeserializableFactory() : super();
+
   @override
   Chip deserialize(SerializeInput input) {
-    final pd = DeserializablePointHelper();
+    final pd = PointDeserializableFactory();
 
     final number = input.readInt();
     final targetPoint = input.readDeserializable(pd);
