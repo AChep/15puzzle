@@ -1,27 +1,32 @@
 import 'dart:math';
 
 import 'package:fifteenpuzzle/data/board.dart';
+import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/domain/game.dart';
 import 'package:fifteenpuzzle/utils/serializable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class GameRunnerWidget extends StatefulWidget {
+class GamePresenterWidget extends StatefulWidget {
+  static const SUPPORTED_SIZES = [3, 4, 5];
+
   final Widget child;
 
-  GameRunnerWidget({@required this.child});
+  final Function(Result) onSolve;
 
-  static _GameRunnerWidgetState of(BuildContext context) {
+  GamePresenterWidget({@required this.child, this.onSolve});
+
+  static GamePresenterWidgetState of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
             as _InheritedStateContainer)
         .data;
   }
 
   @override
-  _GameRunnerWidgetState createState() => _GameRunnerWidgetState();
+  GamePresenterWidgetState createState() => GamePresenterWidgetState();
 }
 
-class _GameRunnerWidgetState extends State<GameRunnerWidget>
+class GamePresenterWidgetState extends State<GamePresenterWidget>
     with WidgetsBindingObserver {
   static const TIME_STOPPED = 0;
 
@@ -58,19 +63,21 @@ class _GameRunnerWidgetState extends State<GameRunnerWidget>
     var board = deserializer.readDeserializable(boardFactory);
 
     final now = DateTime.now().millisecondsSinceEpoch;
-    if (time == null || time < 0 || time > now) {
+    if ( // validate time
+        time == null ||
+            time < 0 ||
+            time > now ||
+            // validate steps
+            steps == null ||
+            steps < 0 ||
+            // validate board
+            board == null) {
       time = TIME_STOPPED;
-    }
-
-    if (steps == null || steps < 0) {
       steps = 0;
-    }
-
-    if (board == null) {
       // Initialize empty board with a classic
       // pattern.
       const size = 4;
-      board = Board.create(size, (n) => Point(n % size, n ~/ size));
+      board = _createBoard(size);
     }
 
     setState(() {
@@ -80,7 +87,20 @@ class _GameRunnerWidgetState extends State<GameRunnerWidget>
     });
   }
 
+  Board _createBoard(int size) =>
+      Board.create(size, (n) => Point(n % size, n ~/ size));
+
+  void playStop() {
+    if (isPlaying()) {
+      stop();
+    } else {
+      play();
+    }
+  }
+
   void play() {
+    assert(board != null);
+
     final now = DateTime.now().millisecondsSinceEpoch;
     setState(() {
       time = now;
@@ -96,12 +116,54 @@ class _GameRunnerWidgetState extends State<GameRunnerWidget>
     });
   }
 
-  void isPlaying() => time != TIME_STOPPED;
+  bool isPlaying() => time != TIME_STOPPED;
+
+  void resize(int size) {
+    setState(() {
+      time = TIME_STOPPED;
+      steps = 0;
+      board = _createBoard(size);
+    });
+  }
+
+  void tap({@required Point<int> point}) {
+    assert(board != null);
+    assert(point != null);
+
+    setState(() {
+      board = game.tap(board, point: point);
+
+      if (isPlaying()) {
+        // Increment the amount of steps.
+        steps = steps + 1;
+
+        // Stop if a user has solved the
+        // board.
+        if (board.isSolved()) {
+          final now = DateTime.now().millisecondsSinceEpoch;
+          final result = Result(
+            steps: steps,
+            time: now - time,
+          );
+
+          widget.onSolve?.call(result);
+
+          stop();
+        }
+      }
+    });
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _saveState();
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.suspending:
+        _saveState();
+        break;
+      default:
+        break;
     }
   }
 
@@ -133,7 +195,7 @@ class _GameRunnerWidgetState extends State<GameRunnerWidget>
 }
 
 class _InheritedStateContainer extends InheritedWidget {
-  final _GameRunnerWidgetState data;
+  final GamePresenterWidgetState data;
 
   _InheritedStateContainer({
     Key key,

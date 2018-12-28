@@ -54,12 +54,14 @@ class SharedPrefSerializeOutput extends SerializeOutput {
 
   @override
   void writeSerializable(Serializable value) {
-    final worker = SharedPrefSerializeOutput(
-      key: key + _DIVIDER,
-      prefs: prefs,
-    );
+    write((prefs, key) {
+      final worker = SharedPrefSerializeOutput(
+        key: key + _DIVIDER,
+        prefs: prefs,
+      );
 
-    value.serialize(worker);
+      value.serialize(worker);
+    });
   }
 
   void write(Function(SharedPreferences, String) block) {
@@ -87,12 +89,14 @@ class SharedPrefSerializeInput extends SerializeInput {
 
   @override
   T readDeserializable<T>(DeserializableHelper<T> helper) {
-    final worker = SharedPrefSerializeInput(
-      key: key + _DIVIDER,
-      prefs: prefs,
-    );
+    return read((prefs, key) {
+      final worker = SharedPrefSerializeInput(
+        key: key + _DIVIDER,
+        prefs: prefs,
+      );
 
-    return helper.deserialize(worker);
+      return helper.deserialize(worker);
+    });
   }
 
   T read<T>(T Function(SharedPreferences, String) block) {

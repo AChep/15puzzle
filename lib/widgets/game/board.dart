@@ -11,10 +11,13 @@ class BoardWidget extends StatefulWidget {
 
   final double size;
 
+  final Function(Point<int>) onTap;
+
   BoardWidget({
     Key key,
     @required this.board,
     @required this.size,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -27,15 +30,40 @@ class _BoardWidgetState extends State<BoardWidget>
   static const _ANIM_MOVE_TAG = "move";
   static const _ANIM_SCALE_TAG = "scale";
 
-  AnimationController controller;
-
   List<_Chip> chips;
+
+  @override
+  void initState() {
+    super.initState();
+    _performSetBoard(
+      newBoard: widget.board,
+    );
+  }
 
   @override
   void didUpdateWidget(BoardWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final board = widget.board;
-    if (chips == null || board.chips.length != oldWidget.board.chips.length) {
+    _performSetBoard(
+      newBoard: widget.board,
+      oldBoard: oldWidget.board,
+    );
+  }
+
+  void _performSetBoard({final Board newBoard, final Board oldBoard}) {
+    if (newBoard == null) {
+      setState(() {
+        // Dispose current animations. This is not necessary, but good
+        // to do.
+        chips?.forEach((chip) {
+          chip.animations.values.forEach((controller) => controller.dispose());
+        });
+
+        chips = null;
+      });
+    }
+
+    final board = newBoard;
+    if (chips == null || board.chips.length != oldBoard.chips.length) {
       // The size of the board has been changed...
       // rebuild everything!
       setState(() {
@@ -230,6 +258,9 @@ class _BoardWidgetState extends State<BoardWidget>
       return SizedBox(
         width: widget.size,
         height: widget.size,
+        child: Center(
+          child: Text('Empty board'),
+        ),
       );
     }
     final chips = board.chips.map(_buildChipWidget).toList();
@@ -268,7 +299,10 @@ class _BoardWidgetState extends State<BoardWidget>
           chip,
           overlayColor,
           backgroundColor,
-          onPressed: () {},
+          chipSize / 3,
+          onPressed: () {
+            widget.onTap(chip.currentPoint);
+          },
         ),
       ),
     );

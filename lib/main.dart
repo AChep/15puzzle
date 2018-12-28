@@ -65,7 +65,7 @@ class _MyMaterialApp extends _MyPlatformApp {
           ),
         ),
       ),
-      home: GamePage(title: title),
+      home: GamePage(),
     );
   }
 }

@@ -82,6 +82,5 @@ class _InheritedStateContainer extends InheritedWidget {
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedStateContainer old) =>
-      data.useDarkTheme != old.data.useDarkTheme;
+  bool updateShouldNotify(_InheritedStateContainer old) => true;
 }
