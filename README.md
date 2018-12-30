@@ -1,20 +1,18 @@
 Game of Fifteen
 ==========
 
-<img alt="Logo" align="right" height="220"
-   src="https://github.com/AChep/15puzzle/raw/master/artwork/icon.png" />
-
-*Puzzle game with Flutter?*
-
-Horario app is a beautiful Material Design app, which helps you to manage your classes and exams in the most convenient way. Fill your timetable once and it will be with you wherever you go, because of sync across all your Android devices. Notifications won’t let you forget about your homework and exams.
-
-Screenshots
-----------------
 <img alt="Main screen: Light" align="right" height="300"
    src="https://github.com/AChep/15puzzle/raw/master/screenshots/screenshot2.jpg" />
 
 <img alt="Main screen: Dark" align="right" height="300"
    src="https://github.com/AChep/15puzzle/raw/master/screenshots/screenshot1.jpg" />
+
+<img alt="Logo" align="right" height="220"
+   src="https://github.com/AChep/15puzzle/raw/master/artwork/icon.png" />
+
+*Puzzle game with Flutter?*
+
+The Game of Fifteen (also called 15-puzzle, Gem Puzzle, Boss Puzzle, Mystic Square and many others) is a sliding puzzle that consists of a frame of numbered square tiles in random order with one tile missing. 
 
 Report a bug or request a feature
 ----------------
