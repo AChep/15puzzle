@@ -1,14 +1,11 @@
 Game of Fifteen
 ==========
 
-<img alt="Main screen: Light" align="right" height="300"
+<img alt="Main screen: Light" align="right" height="400"
    src="https://github.com/AChep/15puzzle/raw/master/screenshots/screenshot2.jpg" />
 
-<img alt="Main screen: Dark" align="right" height="300"
+<img alt="Main screen: Dark" align="right" height="400"
    src="https://github.com/AChep/15puzzle/raw/master/screenshots/screenshot1.jpg" />
-
-<img alt="Logo" align="right" height="220"
-   src="https://github.com/AChep/15puzzle/raw/master/artwork/icon.png" />
 
 *Puzzle game with Flutter?*
 
