@@ -1,7 +1,9 @@
 import 'package:fifteenpuzzle/config/ui.dart';
-import 'package:fifteenpuzzle/game/dialogs.dart';
+import 'package:fifteenpuzzle/links.dart';
+import 'package:fifteenpuzzle/utils/url.dart';
+import 'package:fifteenpuzzle/widgets/about/dialog.dart';
 import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
 
 Widget createMoreBottomSheet(
@@ -29,15 +31,18 @@ Widget createMoreBottomSheet(
         showDialog(
             context: context,
             builder: (context) {
-              return createAboutDialog(context);
+              return AboutDialog();
             });
       },
     ),
-//    ListTile(
-//      leading: const Icon(Icons.people_outline),
-//      title: const Text('Contribute'),
-//      onTap: () {},
-//    ),
+    ListTile(
+      leading: const Icon(Icons.people_outline),
+      title: const Text('Contribute'),
+      onTap: () {
+        Navigator.of(context).pop();
+        launchUrl(url: URL_REPOSITORY);
+      },
+    ),
     const Divider(),
   ];
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fifteenpuzzle/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -52,30 +53,31 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
   }
 
   void _performSetIsPlaying(final bool isPlaying) {
-      // Play scale animation when the state of the
-      // game changes.
-      if (isPlaying) {
-        controller.forward();
-      } else {
-        controller.reverse();
-      }
+    // Play scale animation when the state of the
+    // game changes.
+    if (isPlaying) {
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
 
-      // Control the timer.
-      _disposeTimer();
+    // Control the timer.
+    _disposeTimer();
 
-      if (isPlaying) {
-        timer = Timer.periodic(
-          const Duration(milliseconds: 100),
-              (timer) => setState(() {}), // rebuild the widget
-        );
-      }
+    if (isPlaying) {
+      timer = Timer.periodic(
+        const Duration(milliseconds: 100),
+        (timer) => setState(() {}), // rebuild the widget
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final timeStr = _formatElapsedTime(widget.time != 0
+    final time = widget.time != 0
         ? DateTime.now().millisecondsSinceEpoch - widget.time
-        : 0);
+        : 0;
+    final timeStr = _formatElapsedTime(time);
 
     return AnimatedBuilder(
       animation: animation,
@@ -86,12 +88,23 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
           child: child,
         );
       },
-      child: Text(
-        timeStr,
-        style: Theme.of(context).textTheme.display3.copyWith(
-              fontSize: widget.fontSize,
-              color: Theme.of(context).textTheme.title.color,
-            ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            timeStr,
+            style: Theme.of(context).textTheme.display3.copyWith(
+                  fontSize: widget.fontSize,
+                  color: Theme.of(context).textTheme.title.color,
+                ),
+          ),
+          const SizedBox(width: 16.0),
+          StopwatchIcon(
+            size: 24,
+            millis: time,
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ],
       ),
     );
   }

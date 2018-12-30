@@ -144,6 +144,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
           final result = Result(
             steps: steps,
             time: now - time,
+            size: board.size,
           );
 
           widget.onSolve?.call(result);

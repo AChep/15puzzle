@@ -1,5 +1,7 @@
 import 'package:fifteenpuzzle/data/result.dart';
+import 'package:fifteenpuzzle/links.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class GameVictoryDialog extends StatelessWidget {
   final Result result;
@@ -8,6 +10,7 @@ class GameVictoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timeFormatted = _formatElapsedTime(result.time);
     return AlertDialog(
       title: Center(
         child: Text(
@@ -18,7 +21,7 @@ class GameVictoryDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text("You've successfuly completed the puzzle"),
+          Text("You've successfuly completed the ${result.size}x${result.size} puzzle"),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +35,7 @@ class GameVictoryDialog extends StatelessWidget {
                     style: Theme.of(context).textTheme.caption,
                   ),
                   Text(
-                    _formatElapsedTime(result.time),
+                    timeFormatted,
                     style: Theme.of(context).textTheme.display1.copyWith(
                           color: Theme.of(context).textTheme.body1.color,
                         ),
@@ -61,6 +64,14 @@ class GameVictoryDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         // usually buttons at the bottom of the dialog
+        new FlatButton(
+          child: new Text("Share"),
+          onPressed: () {
+            Share.share("I have solved the Game of Fifteen's "
+                "${result.size}x${result.size} puzzle in $timeFormatted "
+                "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
+          },
+        ),
         new FlatButton(
           child: new Text("Close"),
           onPressed: () {

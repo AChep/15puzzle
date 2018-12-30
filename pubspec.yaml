@@ -21,6 +21,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.4.3
   fluttertoast: ^2.2.2
+  url_launcher: ^4.0.3
+  share: ^0.5.3
   color: any
   rxdart: ^0.20.0
 
