@@ -1,11 +1,16 @@
+import 'package:fifteenpuzzle/config/ui.dart';
 import 'package:fifteenpuzzle/game/dialogs.dart';
-import 'package:fifteenpuzzle/game/presenter.dart';
-import 'package:fifteenpuzzle/main.dart';
+import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-Widget createMoreBottomSheet(BuildContext context) {
-  final state = AppStateContainer.of(context);
+Widget createMoreBottomSheet(
+  BuildContext context, {
+  @required int psize,
+  @required Function(int) call,
+}) {
+  final config = ConfigUiContainer.of(context);
+//  final state = GameRunnerWidget.of(context);
 
   Widget createSeparator(String text) => Padding(
         padding: const EdgeInsets.all(16),
@@ -28,24 +33,24 @@ Widget createMoreBottomSheet(BuildContext context) {
             });
       },
     ),
-    ListTile(
-      leading: const Icon(Icons.people_outline),
-      title: const Text('Contribute'),
-      onTap: () {},
-    ),
+//    ListTile(
+//      leading: const Icon(Icons.people_outline),
+//      title: const Text('Contribute'),
+//      onTap: () {},
+//    ),
     const Divider(),
   ];
 
   // Add board settings
   items.add(createSeparator('Board size'));
-  items.addAll(GamePresenter.SUPPORTED_SIZES.map((size) {
+  items.addAll(GamePresenterWidget.SUPPORTED_SIZES.map((size) {
     return RadioListTile(
       value: size,
-      groupValue: state.game.game.board.value?.size,
+      groupValue: psize,
       title: Text('${size}x$size'),
       dense: true,
       onChanged: (_) {
-        state.game.resize(size);
+        call(size);
         Navigator.of(context).pop();
       },
     );
@@ -54,10 +59,10 @@ Widget createMoreBottomSheet(BuildContext context) {
   // Add theme settings
   items.add(createSeparator('Theme'));
   items.add(SwitchListTile(
-    value: state.useDarkTheme,
+    value: config.useDarkTheme,
     title: Text('Dark theme'),
     onChanged: (useDarkTheme) {
-      state.setUseDarkTheme(useDarkTheme, save: true);
+      config.setUseDarkTheme(useDarkTheme, save: true);
       Navigator.of(context).pop();
     },
   ));

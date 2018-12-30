@@ -1,7 +1,9 @@
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = file('15puzzle-release.properties')
-keystorePropertiesFile.withReader('UTF-8') { reader ->
-    keystoreProperties.load(reader)
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
 }
 
 def localProperties = new Properties()

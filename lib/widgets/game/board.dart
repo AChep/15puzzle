@@ -1,54 +1,72 @@
 import 'dart:math';
 
-import 'package:fifteenpuzzle/game/logic/board.dart';
-import 'package:fifteenpuzzle/game/logic/chip.dart';
-import 'package:fifteenpuzzle/game/logic/game.dart';
-import 'package:fifteenpuzzle/main.dart';
-import 'package:fifteenpuzzle/utils/state.dart';
-import 'package:fifteenpuzzle/widgets/chip.dart';
+import 'package:fifteenpuzzle/data/board.dart';
+import 'package:fifteenpuzzle/data/chip.dart';
+import 'package:fifteenpuzzle/widgets/game/chip.dart';
 import 'package:flutter/material.dart' hide Chip;
 import 'package:flutter/widgets.dart';
 
 class BoardWidget extends StatefulWidget {
-  final Game game;
+  final Board board;
 
   final double size;
 
+  final Function(Point<int>) onTap;
+
   BoardWidget({
     Key key,
-    @required this.game,
+    @required this.board,
     @required this.size,
+    this.onTap,
   }) : super(key: key);
 
   @override
   _BoardWidgetState createState() => _BoardWidgetState();
 }
 
-class _BoardWidgetState extends AutoDisposableState<BoardWidget>
+class _BoardWidgetState extends State<BoardWidget>
     with TickerProviderStateMixin {
   static const _ANIM_COLOR_TAG = "color";
   static const _ANIM_MOVE_TAG = "move";
   static const _ANIM_SCALE_TAG = "scale";
-
-  AnimationController controller;
-
-  Board board;
 
   List<_Chip> chips;
 
   @override
   void initState() {
     super.initState();
-    autoDispose(widget.game.board.listen(_onBoardChange));
+    _performSetBoard(
+      newBoard: widget.board,
+    );
   }
 
-  void _onBoardChange(Board board) {
-    if (chips == null || board.chips.length != chips.length) {
+  @override
+  void didUpdateWidget(BoardWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _performSetBoard(
+      newBoard: widget.board,
+      oldBoard: oldWidget.board,
+    );
+  }
+
+  void _performSetBoard({final Board newBoard, final Board oldBoard}) {
+    if (newBoard == null) {
+      setState(() {
+        // Dispose current animations. This is not necessary, but good
+        // to do.
+        chips?.forEach((chip) {
+          chip.animations.values.forEach((controller) => controller.dispose());
+        });
+
+        chips = null;
+      });
+    }
+
+    final board = newBoard;
+    if (chips == null || board.chips.length != oldBoard.chips.length) {
       // The size of the board has been changed...
       // rebuild everything!
       setState(() {
-        this.board = board;
-
         // Create our extras
         final hueStep = 360 / board.chips.length;
         chips = board.chips.map((chip) {
@@ -61,10 +79,6 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
       });
       return;
     }
-
-    setState(() {
-      this.board = board;
-    });
 
     for (var chip in board.chips) {
       final extra = chips[chip.number];
@@ -102,6 +116,7 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
       curve: ElasticOutCurve(1.0),
     );
 
+    final board = widget.board;
     final oldX = target.x * board.size;
     final oldY = target.y * board.size;
     animation.addListener(() {
@@ -166,6 +181,7 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
         curve: curve,
       );
 
+      final board = widget.board;
       var wasHalfwayOrMore = false;
       animation.addListener(() {
         final isHalfwayOrMore = animation.value >= 0.5;
@@ -237,10 +253,14 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
 
   @override
   Widget build(BuildContext context) {
+    final board = widget.board;
     if (board == null) {
       return SizedBox(
         width: widget.size,
         height: widget.size,
+        child: Center(
+          child: Text('Empty board'),
+        ),
       );
     }
     final chips = board.chips.map(_buildChipWidget).toList();
@@ -253,6 +273,7 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
   }
 
   Widget _buildChipWidget(Chip chip) {
+    final board = widget.board;
     final extra = chips[chip.number];
 
     // Calculate the distance between current absolute position
@@ -278,8 +299,9 @@ class _BoardWidgetState extends AutoDisposableState<BoardWidget>
           chip,
           overlayColor,
           backgroundColor,
+          chipSize / 3,
           onPressed: () {
-            widget.game.tap(chip.currentPoint);
+            widget.onTap(chip.currentPoint);
           },
         ),
       ),

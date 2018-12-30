@@ -1,4 +1,4 @@
-import 'package:fifteenpuzzle/game/logic/chip.dart';
+import 'package:fifteenpuzzle/data/chip.dart';
 import 'package:flutter/material.dart' hide Chip;
 
 class ChipWidget extends StatelessWidget {
@@ -10,10 +10,13 @@ class ChipWidget extends StatelessWidget {
 
   final Color backgroundColor;
 
+  final double fontSize;
+
   ChipWidget(
     this.chip,
     this.overlayColor,
-    this.backgroundColor, {
+      this.backgroundColor,
+      this.fontSize, {
     @required this.onPressed,
   });
 
@@ -39,9 +42,9 @@ class ChipWidget extends StatelessWidget {
           child: Center(
             child: Text(
               '${chip.number + 1}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 30.0,
+                fontSize: fontSize,
               ),
             ),
           ),
