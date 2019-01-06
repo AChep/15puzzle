@@ -73,15 +73,7 @@ class GamePage extends StatelessWidget {
         'id': id,
         'score': result.time,
       });
-    } on PlatformException catch (e) {
-      Fluttertoast.showToast(
-          msg: 'Sending score failed $e',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white
-      );
+    } on PlatformException {
     }
   }
 }

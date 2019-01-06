@@ -1,5 +1,6 @@
 import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/links.dart';
+import 'package:fifteenpuzzle/widgets/game/page.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -21,7 +22,8 @@ class GameVictoryDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text("You've successfuly completed the ${result.size}x${result.size} puzzle"),
+          Text(
+              "You've successfuly completed the ${result.size}x${result.size} puzzle"),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,6 +66,24 @@ class GameVictoryDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         // usually buttons at the bottom of the dialog
+        new FlatButton(
+          child: new Text("Leaderboard"),
+          onPressed: () async {
+            String id;
+            if (result.size == 3) {
+              id = GamePage.leaderboard3x3Id;
+            } else if (result.size == 4) {
+              id = GamePage.leaderboard4x4Id;
+            } else if (result.size == 5) {
+              id = GamePage.leaderboard5x5Id;
+            }
+
+            await GamePage.playGames
+                .invokeMethod("showLeaderboard", <String, dynamic>{
+              'id': id,
+            });
+          },
+        ),
         new FlatButton(
           child: new Text("Share"),
           onPressed: () {

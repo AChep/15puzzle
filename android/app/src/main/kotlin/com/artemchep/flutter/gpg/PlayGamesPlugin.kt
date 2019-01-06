@@ -127,7 +127,7 @@ class PlayGamesPlugin(
                             result.error(ERROR_INVALID_ARGS, null, null)
                             return@launch
                         }
-                    val score = method.argument<Long>("score")
+                    val score = method.argumentLong("score")
                         ?: run {
                             result.error(ERROR_INVALID_ARGS, null, null)
                             return@launch
@@ -162,6 +162,7 @@ class PlayGamesPlugin(
             val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(registrar.activity())
             if (googleSignInAccount != null) {
                 continuation.resume(googleSignInAccount)
+                return@suspendCancellableCoroutine
             }
 
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
@@ -216,6 +217,11 @@ class PlayGamesPlugin(
      */
     interface OnActivityResultListener {
         fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean
+    }
+
+    private fun MethodCall.argumentLong(key: String): Long? {
+        val obj = argument<Any?>(key)
+        return obj as? Long ?: (obj as? Int)?.toLong()
     }
 
     private fun <T> MethodCall.argumentOrDefault(key: String, defaultValue: T) =
