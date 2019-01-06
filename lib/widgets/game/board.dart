@@ -60,6 +60,7 @@ class _BoardWidgetState extends State<BoardWidget>
 
         chips = null;
       });
+      return;
     }
 
     final board = newBoard;
