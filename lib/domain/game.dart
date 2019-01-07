@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 abstract class Game {
   static Game instance = _GameImpl();
 
+  Board hardest(Board board);
+
   /// Randomly shuffles the chips on a board, for
   /// a given amount of times.
   Board shuffle(Board board, {int amount = 300});
@@ -19,6 +21,65 @@ abstract class Game {
 }
 
 class _GameImpl implements Game {
+  @override
+  Board hardest(Board board) {
+    List<List<int>> variants;
+
+    switch (board.size) {
+      case 3:
+        {
+          variants = [
+            [8, 6, 7, 2, 5, 4, 3, 0, 1],
+            [6, 4, 7, 8, 5, 0, 3, 2, 1]
+          ];
+          break;
+        }
+      case 4:
+        {
+          variants = [
+            // RALPH UDO GASSER
+            // Harnessing Computational Resources for Efficient Exhaustive Search
+            // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.39.6069&rep=rep1&type=pdf
+            [15, 14, 8, 12, 10, 11, 9, 13, 2, 6, 5, 1, 3, 7, 4, 0],
+            [15, 11, 13, 12, 14, 10, 8, 9, 7, 2, 5, 1, 3, 6, 4, 0],
+            [15, 11, 13, 12, 14, 10, 8, 9, 2, 6, 5, 1, 3, 7, 4, 0],
+            [15, 11, 9, 12, 14, 10, 13, 8, 6, 7, 5, 1, 3, 2, 4, 0],
+            [15, 11, 9, 12, 14, 10, 13, 8, 2, 6, 5, 1, 3, 7, 4, 0],
+            [15, 11, 8, 12, 14, 10, 13, 9, 2, 7, 5, 1, 3, 6, 4, 0],
+            [15, 11, 9, 12, 14, 10, 8, 13, 6, 2, 5, 1, 3, 7, 4, 0],
+            [15, 11, 8, 12, 14, 10, 9, 13, 2, 6, 5, 1, 3, 7, 4, 0],
+            [15, 11, 8, 12, 14, 10, 9, 13, 2, 6, 4, 5, 3, 7, 1, 0]
+          ];
+          break;
+        }
+      default:
+        {
+          return shuffle(board);
+        }
+    }
+
+    final variant = variants[Random().nextInt(variants.length)];
+
+    // Chips
+    final chips = List.of(board.chips, growable: false);
+    for (var i = 0; i < chips.length; i++) {
+      final pos = variant.indexOf(chips[i].number + 1);
+      final x = pos % board.size;
+      final y = pos ~/ board.size;
+
+      // Apply new position
+      chips[i] = chips[i].move(Point(x, y));
+    }
+
+    // Blank
+    final blankPos = variant.indexOf(0);
+    final blankX = blankPos % board.size;
+    final blankY = blankPos ~/ board.size;
+    final blank = Point(blankX, blankY);
+
+    return Board(board.size, chips, blank);
+  }
+
   @override
   Board shuffle(Board board, {int amount = 300}) {
     final random = Random();

@@ -105,7 +105,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     setState(() {
       time = now;
       steps = 0;
-      board = game.shuffle(board);
+      board = game.shuffle(game.hardest(board), amount: board.size * board.size);
     });
   }
 
