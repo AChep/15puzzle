@@ -25,6 +25,7 @@ dependencies:
   share: ^0.5.3
   color: any
   rxdart: ^0.20.0
+  encrypt: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

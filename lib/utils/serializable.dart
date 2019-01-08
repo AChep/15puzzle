@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,5 +106,85 @@ class SharedPrefSerializeInput extends SerializeInput {
     counter++;
 
     return block(prefs, key);
+  }
+}
+
+class MapSerializeOutput extends SerializeOutput {
+  final String key;
+
+  final Map<String, dynamic> map;
+
+  int counter = 0;
+
+  MapSerializeOutput({this.key = "", map}) : this.map = map ?? Map();
+
+  @override
+  void writeInt(int value) {
+    write((key) {
+      map[key] = value;
+    });
+  }
+
+  @override
+  void writeString(String value) {
+    write((key) {
+      map[key] = value;
+    });
+  }
+
+  @override
+  void writeSerializable(Serializable value) {
+    write((key) {
+      final worker = MapSerializeOutput(
+        key: key + _DIVIDER,
+        map: map,
+      );
+
+      value.serialize(worker);
+    });
+  }
+
+  void write(Function(String) block) {
+    final key = this.key + counter.toString();
+    counter++;
+
+    block(key);
+  }
+
+  String toJsonString() => json.encode(map);
+}
+
+class MapSerializeInput extends SerializeInput {
+  final String key;
+
+  final Map<String, dynamic> map;
+
+  int counter = 0;
+
+  MapSerializeInput({this.key = "", @required this.map});
+
+  @override
+  int readInt() => read((key) => map[key]);
+
+  @override
+  String readString() => read((key) => map[key]);
+
+  @override
+  T readDeserializable<T>(DeserializableHelper<T> helper) {
+    return read((key) {
+      final worker = MapSerializeInput(
+        key: key + _DIVIDER,
+        map: map,
+      );
+
+      return helper.deserialize(worker);
+    });
+  }
+
+  T read<T>(T Function(String) block) {
+    final key = this.key + counter.toString();
+    counter++;
+
+    return block(key);
   }
 }

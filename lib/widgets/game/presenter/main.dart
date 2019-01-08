@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:encrypt/encrypt.dart';
 import 'package:fifteenpuzzle/data/board.dart';
 import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/domain/game.dart';
@@ -30,6 +32,13 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     with WidgetsBindingObserver {
   static const TIME_STOPPED = 0;
 
+  static const _SALSA_KEY = 'Ro9ndPUceXQQL8GS';
+  static const _SALSA_IV = '84bgee3v';
+
+  /// Encrypter to protected saved states of the game and
+  /// make hacking a lil bit harder.
+  final _encrypter = Encrypter(Salsa20(_SALSA_KEY, _SALSA_IV));
+
   final Game game = Game.instance;
 
   Board board;
@@ -52,21 +61,36 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
-    final deserializer = SharedPrefSerializeInput(
-      key: "state",
-      prefs: prefs,
-    );
+    final encryptedText = prefs.getString("state") ?? "";
+    final plainText = _encrypter.decrypt(encryptedText);
 
-    const boardFactory = BoardDeserializableFactory();
-    var time = deserializer.readInt();
-    var steps = deserializer.readInt();
-    var board = deserializer.readDeserializable(boardFactory);
+    dynamic jsonMap;
+    try {
+      jsonMap = json.decode(plainText);
+    } catch (FormatException) {
+      jsonMap = Map<String, dynamic>();
+    }
+
+    int elapsedTime;
+    int time;
+    int steps;
+    Board board;
+
+    try {
+      final deserializer = MapSerializeInput(map: jsonMap);
+      const boardFactory = BoardDeserializableFactory();
+      elapsedTime = deserializer.readInt();
+      time = deserializer.readInt();
+      steps = deserializer.readInt();
+      board = deserializer.readDeserializable(boardFactory);
+    } catch (Exception) {}
 
     final now = DateTime.now().millisecondsSinceEpoch;
     if ( // validate time
         time == null ||
             time < 0 ||
             time > now ||
+            time > 0 && elapsedTime > now - time ||
             // validate steps
             steps == null ||
             steps < 0 ||
@@ -170,14 +194,28 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void _saveState() async {
     final prefs = await SharedPreferences.getInstance();
-    final serializer = SharedPrefSerializeOutput(
-      key: "state",
-      prefs: prefs,
-    );
+    final serializer = MapSerializeOutput();
 
+    if (board == null) {
+      // Clear the current state, loading this will recreate
+      // the board.
+      prefs.setString("state", null);
+      return;
+    }
+
+    // Write the delta of time, so user can not close the app, change
+    // time and go back so easily.
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsedTime = now - time;
+
+    serializer.writeInt(elapsedTime);
     serializer.writeInt(time);
     serializer.writeInt(steps);
     serializer.writeSerializable(board);
+
+    final plainText = serializer.toJsonString();
+    final encryptedText = _encrypter.encrypt(plainText);
+    prefs.setString("state", encryptedText);
   }
 
   @override
