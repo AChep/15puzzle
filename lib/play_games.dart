@@ -2,9 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-const _LEADERBOARD_3x3 = 'CgkI25T8-IoFEAIQAg';
-const _LEADERBOARD_4x4 = 'CgkI25T8-IoFEAIQAQ';
-const _LEADERBOARD_5x5 = 'CgkI25T8-IoFEAIQAw';
+const _LEADERBOARD_3x3 = 'CgkI25T8-IoFEAIQBQ';
+const _LEADERBOARD_4x4 = 'CgkI25T8-IoFEAIQBg';
+const _LEADERBOARD_5x5 = 'CgkI25T8-IoFEAIQBw';
 
 class PlayGames {
   /// Returns the key to a leaderboard
