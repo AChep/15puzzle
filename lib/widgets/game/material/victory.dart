@@ -1,5 +1,6 @@
 import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/links.dart';
+import 'package:fifteenpuzzle/play_games.dart';
 import 'package:fifteenpuzzle/widgets/game/page.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
@@ -68,20 +69,11 @@ class GameVictoryDialog extends StatelessWidget {
         // usually buttons at the bottom of the dialog
         new FlatButton(
           child: new Text("Leaderboard"),
-          onPressed: () async {
-            String id;
-            if (result.size == 3) {
-              id = GamePage.leaderboard3x3Id;
-            } else if (result.size == 4) {
-              id = GamePage.leaderboard4x4Id;
-            } else if (result.size == 5) {
-              id = GamePage.leaderboard5x5Id;
-            }
-
-            await GamePage.playGames
-                .invokeMethod("showLeaderboard", <String, dynamic>{
-              'id': id,
-            });
+          onPressed: () {
+            final playGames = PlayGamesContainer.of(context);
+            playGames.showLeaderboard(
+              key: PlayGames.getLeaderboardOfSize(result.size),
+            );
           },
         ),
         new FlatButton(

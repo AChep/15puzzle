@@ -1,31 +1,23 @@
 import 'dart:io';
 
 import 'package:fifteenpuzzle/data/result.dart';
+import 'package:fifteenpuzzle/play_games.dart';
 import 'package:fifteenpuzzle/widgets/game/cupertino/page.dart';
 import 'package:fifteenpuzzle/widgets/game/material/page.dart';
 import 'package:fifteenpuzzle/widgets/game/material/victory.dart';
 import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class GamePage extends StatelessWidget {
-  static const playGames = const MethodChannel(
-      'com.artemchep.flutter/google_play_games');
-
-  static const leaderboard3x3Id = 'CgkI25T8-IoFEAIQAg';
-  static const leaderboard4x4Id = 'CgkI25T8-IoFEAIQAQ';
-  static const leaderboard5x5Id = 'CgkI25T8-IoFEAIQAw';
-
   @override
   Widget build(BuildContext context) {
     final rootWidget = _buildRoot(context);
     return GamePresenterWidget(
       child: rootWidget,
       onSolve: (result) {
-        _submitResult(result);
+        _submitResult(context, result);
         _showVictoryDialog(context, result);
       },
     );
@@ -55,25 +47,11 @@ class GamePage extends StatelessWidget {
     }
   }
 
-  void _submitResult(Result result) async {
-    try {
-      String id;
-      if (result.size == 3) {
-        id = leaderboard3x3Id;
-      } else if (result.size == 4) {
-        id = leaderboard4x4Id;
-      } else if (result.size == 5) {
-        id = leaderboard5x5Id;
-      }
-
-      // Submit the score to the
-      // Google Play Games
-      await playGames.invokeMethod(
-          'submitScore', <String, dynamic>{
-        'id': id,
-        'score': result.time,
-      });
-    } on PlatformException {
-    }
+  void _submitResult(BuildContext context, Result result) {
+    final playGames = PlayGamesContainer.of(context);
+    playGames.submitScore(
+      key: PlayGames.getLeaderboardOfSize(result.size),
+      time: result.time,
+    );
   }
 }

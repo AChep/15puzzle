@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+@immutable
 class Result {
   final int steps;
   final int time;

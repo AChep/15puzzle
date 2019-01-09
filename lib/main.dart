@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:fifteenpuzzle/config/ui.dart';
+import 'package:fifteenpuzzle/play_games.dart';
 import 'package:fifteenpuzzle/widgets/game/page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(
-      ConfigUiContainer(
-        child: MyApp(),
+      PlayGamesContainer(
+        child: ConfigUiContainer(
+          child: MyApp(),
+        ),
       ),
     );
 

@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:fifteenpuzzle/utils/serializable.dart';
+import 'package:meta/meta.dart';
 
 import 'point.dart';
 
+@immutable
 class Chip implements Serializable {
   /// Unique identifier of a chip, starts
   /// from a zero.

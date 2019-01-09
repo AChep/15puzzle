@@ -35,6 +35,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
   static const _SALSA_KEY = 'Ro9ndPUceXQQL8GS';
   static const _SALSA_IV = '84bgee3v';
 
+  static const _KEY_STATE = 'state';
+
   /// Encrypter to protected saved states of the game and
   /// make hacking a lil bit harder.
   final _encrypter = Encrypter(Salsa20(_SALSA_KEY, _SALSA_IV));
@@ -61,7 +63,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
-    final encryptedText = prefs.getString("state") ?? "";
+    final encryptedText = prefs.getString(_KEY_STATE) ?? '';
     final plainText = _encrypter.decrypt(encryptedText);
 
     dynamic jsonMap;
@@ -199,7 +201,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     if (board == null) {
       // Clear the current state, loading this will recreate
       // the board.
-      prefs.setString("state", null);
+      prefs.setString(_KEY_STATE, null);
       return;
     }
 
@@ -215,7 +217,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
     final plainText = serializer.toJsonString();
     final encryptedText = _encrypter.encrypt(plainText);
-    prefs.setString("state", encryptedText);
+    prefs.setString(_KEY_STATE, encryptedText);
   }
 
   @override
