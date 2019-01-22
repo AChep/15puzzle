@@ -1,18 +1,23 @@
 import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/links.dart';
 import 'package:fifteenpuzzle/play_games.dart';
-import 'package:fifteenpuzzle/widgets/game/page.dart';
+import 'package:fifteenpuzzle/widgets/game/format.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
 class GameVictoryDialog extends StatelessWidget {
   final Result result;
 
-  GameVictoryDialog({@required this.result});
+  final String Function(int) timeFormatter;
+
+  GameVictoryDialog({
+    @required this.result,
+    this.timeFormatter: formatElapsedTime,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final timeFormatted = _formatElapsedTime(result.time);
+    final timeFormatted = timeFormatter(result.time);
     return AlertDialog(
       title: Center(
         child: Text(
@@ -92,14 +97,5 @@ class GameVictoryDialog extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  String _formatElapsedTime(int millis) {
-    final seconds = millis ~/ 1000;
-    final fraction = millis % 1000 ~/ 100;
-
-    final s = seconds ~/ 60;
-    final m = seconds % 60;
-    return '$s:${m <= 9 ? '0$m' : '$m'}.$fraction';
   }
 }

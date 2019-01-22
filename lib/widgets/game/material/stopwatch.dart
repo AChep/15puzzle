@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fifteenpuzzle/widgets/game/format.dart';
 import 'package:fifteenpuzzle/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,9 +10,15 @@ import 'package:flutter/widgets.dart';
 class GameStopwatchWidget extends StatefulWidget {
   final int time;
 
+  final String Function(int) timeFormatter;
+
   final double fontSize;
 
-  GameStopwatchWidget({@required this.time, @required this.fontSize});
+  GameStopwatchWidget({
+    @required this.time,
+    @required this.fontSize,
+    this.timeFormatter: formatElapsedTime,
+  });
 
   @override
   _GameStopwatchWidgetState createState() => _GameStopwatchWidgetState();
@@ -77,7 +84,7 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
     final time = widget.time != 0
         ? DateTime.now().millisecondsSinceEpoch - widget.time
         : 0;
-    final timeStr = _formatElapsedTime(time);
+    final timeStr = widget.timeFormatter(time);
 
     return AnimatedBuilder(
       animation: animation,
@@ -107,15 +114,6 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
         ],
       ),
     );
-  }
-
-  String _formatElapsedTime(int millis) {
-    final seconds = millis ~/ 1000;
-    final fraction = millis % 1000 ~/ 100;
-
-    final s = seconds ~/ 60;
-    final m = seconds % 60;
-    return '$s:${m <= 9 ? '0$m' : '$m'}.$fraction';
   }
 
   @override
