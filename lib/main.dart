@@ -62,6 +62,7 @@ class _MyMaterialApp extends _MyPlatformApp {
       theme: theme.copyWith(
         primaryColor: Colors.blue,
         accentColor: Colors.amberAccent,
+        accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
         dialogTheme: const DialogTheme(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0)),

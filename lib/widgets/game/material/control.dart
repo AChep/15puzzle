@@ -63,22 +63,40 @@ class _GamePlayStopButtonState extends State<GamePlayStopButton>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final animRatioPlay = _range(1.0 - animation.value, begin: 0.0, end: 1.0);
+    final animRatioStop = _range(animation.value, begin: 0.0, end: 1.0);
+
+    // Calculate the background color of the FAB.
+    final backgroundColorAccent = theme.accentColor.withOpacity(animRatioPlay);
+    final backgroundColorCard = theme.cardColor.withOpacity(animRatioStop);
+    final backgroundColor =
+        Color.alphaBlend(backgroundColorAccent, backgroundColorCard);
+
     return FloatingActionButton(
+      backgroundColor: backgroundColor,
       onPressed: () => widget.onTap?.call(),
       child: Stack(
         children: <Widget>[
           Opacity(
-            opacity: _range(1.0 - animation.value, begin: 0.0, end: 1.0),
+            opacity: animRatioPlay,
             child: Transform.rotate(
               angle: animation.value * pi / 2.0,
-              child: Icon(Icons.play_arrow),
+              child: Icon(
+                Icons.play_arrow,
+                color: theme.accentIconTheme.color,
+              ),
             ),
           ),
           Opacity(
-            opacity: _range(animation.value, begin: 0.0, end: 1.0),
+            opacity: animRatioStop,
             child: Transform.rotate(
               angle: animation.value * pi / 2.0,
-              child: Icon(Icons.stop),
+              child: Icon(
+                Icons.stop,
+                color: theme.iconTheme.color,
+              ),
             ),
           ),
         ],
