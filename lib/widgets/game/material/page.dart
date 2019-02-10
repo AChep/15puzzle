@@ -171,7 +171,6 @@ class GameMaterialPage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return createMoreBottomSheet(context,
-                    psize: presenter.board.size,
                     call: (size) {
                       presenter.resize(size);
                     });

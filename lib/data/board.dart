@@ -18,6 +18,9 @@ class Board extends Serializable {
 
   Board(this.size, this.chips, this.blank);
 
+  factory Board.createNormal(int size) =>
+      Board.create(size, (n) => Point(n % size, n ~/ size));
+
   factory Board.create(int size, Point<int> Function(int) factory) {
     final blank = factory(size * size - 1);
     final chips = List<Chip>.generate(size * size - 1, (n) {

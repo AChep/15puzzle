@@ -113,8 +113,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     });
   }
 
-  Board _createBoard(int size) =>
-      Board.create(size, (n) => Point(n % size, n ~/ size));
+  Board _createBoard(int size) => Board.createNormal(size);
 
   void playStop() {
     if (isPlaying()) {

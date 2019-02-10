@@ -1,76 +1,119 @@
+import 'dart:math';
+
 import 'package:fifteenpuzzle/config/ui.dart';
+import 'package:fifteenpuzzle/data/board.dart';
 import 'package:fifteenpuzzle/links.dart';
 import 'package:fifteenpuzzle/utils/url.dart';
 import 'package:fifteenpuzzle/widgets/about/dialog.dart';
-import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
+import 'package:fifteenpuzzle/widgets/game/board.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
 
 Widget createMoreBottomSheet(
   BuildContext context, {
-  @required int psize,
   @required Function(int) call,
 }) {
   final config = ConfigUiContainer.of(context);
-//  final state = GameRunnerWidget.of(context);
 
-  Widget createSeparator(String text) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.caption,
+  Widget createBoard({int size}) => Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(4.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black54
+                    : Colors.black12,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: InkWell(
+                onTap: () {
+                  call(size);
+                  Navigator.of(context).pop();
+                },
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    final puzzleSize = min(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    );
+
+                    return BoardWidget(
+                      board: Board.createNormal(size),
+                      onTap: null,
+                      showNumbers: false,
+                      size: puzzleSize,
+                    );
+                  },
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text('${size}x$size'),
+            ),
+          ],
         ),
       );
 
   final items = <Widget>[
-    ListTile(
-      leading: const Icon(Icons.info_outline),
-      title: const Text('About'),
-      onTap: () {
-        Navigator.of(context).pop();
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AboutDialog();
-            });
-      },
+    SizedBox(height: 16),
+    Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(width: 4),
+        IconButton(
+          icon: const Icon(Icons.info_outline),
+          onPressed: () {
+            Navigator.of(context).pop();
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AboutDialog();
+                });
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.people_outline),
+          onPressed: () {
+            Navigator.of(context).pop();
+            launchUrl(url: URL_REPOSITORY);
+          },
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: OutlineButton(
+              shape: const RoundedRectangleBorder(
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(16.0)),
+              ),
+              onPressed: () {
+                var shouldUseDarkTheme = !config.useDarkTheme;
+                config.setUseDarkTheme(shouldUseDarkTheme, save: true);
+              },
+              child: Text('Toggle theme'),
+            ),
+          ),
+        ),
+        SizedBox(width: 16),
+      ],
     ),
-    ListTile(
-      leading: const Icon(Icons.people_outline),
-      title: const Text('Contribute'),
-      onTap: () {
-        Navigator.of(context).pop();
-        launchUrl(url: URL_REPOSITORY);
-      },
+    SizedBox(height: 4),
+    Row(
+      children: <Widget>[
+        SizedBox(width: 8),
+        Expanded(child: createBoard(size: 3)),
+        Expanded(child: createBoard(size: 4)),
+        Expanded(child: createBoard(size: 5)),
+        SizedBox(width: 8),
+      ],
     ),
-    const Divider(),
+    SizedBox(height: 16),
   ];
-
-  // Add board settings
-  items.add(createSeparator('Board size'));
-  items.addAll(GamePresenterWidget.SUPPORTED_SIZES.map((size) {
-    return RadioListTile(
-      value: size,
-      groupValue: psize,
-      title: Text('${size}x$size'),
-      dense: true,
-      onChanged: (_) {
-        call(size);
-        Navigator.of(context).pop();
-      },
-    );
-  }));
-
-  // Add theme settings
-  items.add(createSeparator('Theme'));
-  items.add(SwitchListTile(
-    value: config.useDarkTheme,
-    title: Text('Dark theme'),
-    onChanged: (useDarkTheme) {
-      config.setUseDarkTheme(useDarkTheme, save: true);
-      Navigator.of(context).pop();
-    },
-  ));
 
   return new Column(
     mainAxisSize: MainAxisSize.min,

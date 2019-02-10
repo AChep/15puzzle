@@ -11,12 +11,15 @@ class BoardWidget extends StatefulWidget {
 
   final double size;
 
+  final bool showNumbers;
+
   final Function(Point<int>) onTap;
 
   BoardWidget({
     Key key,
     @required this.board,
     @required this.size,
+    this.showNumbers = true,
     this.onTap,
   }) : super(key: key);
 
@@ -301,9 +304,13 @@ class _BoardWidgetState extends State<BoardWidget>
           overlayColor,
           backgroundColor,
           chipSize / 3,
-          onPressed: () {
-            widget.onTap(chip.currentPoint);
-          },
+          showNumber: widget.showNumbers,
+          size: widget.size,
+          onPressed: widget.onTap != null
+              ? () {
+                  widget.onTap(chip.currentPoint);
+                }
+              : null,
         ),
       ),
     );

@@ -12,18 +12,26 @@ class ChipWidget extends StatelessWidget {
 
   final double fontSize;
 
+  final double size;
+
+  final bool showNumber;
+
   ChipWidget(
     this.chip,
     this.overlayColor,
-      this.backgroundColor,
-      this.fontSize, {
+    this.backgroundColor,
+    this.fontSize, {
     @required this.onPressed,
+    @required this.size,
+    this.showNumber = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final shape = const RoundedRectangleBorder(
-      borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+    final isCompact = size < 150;
+
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(isCompact ? 4.0 : 8.0)),
     );
 
     var color = Theme.of(context).scaffoldBackgroundColor;
@@ -31,23 +39,25 @@ class ChipWidget extends StatelessWidget {
     color = Color.alphaBlend(overlayColor, color);
 
     return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child:  Material(
+      padding: EdgeInsets.all(isCompact ? 2.0 : 4.0),
+      child: Material(
         shape: shape,
         color: color,
         elevation: 1,
         child: InkWell(
           onTap: onPressed,
           customBorder: shape,
-          child: Center(
-            child: Text(
-              '${chip.number + 1}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize,
-              ),
-            ),
-          ),
+          child: showNumber
+              ? Center(
+                  child: Text(
+                    '${chip.number + 1}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSize,
+                    ),
+                  ),
+                )
+              : null,
         ),
       ),
     );
