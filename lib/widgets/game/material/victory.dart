@@ -18,6 +18,38 @@ class GameVictoryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeFormatted = timeFormatter(result.time);
+    final actions = <Widget>[
+      new FlatButton(
+        child: new Text("Share"),
+        onPressed: () {
+          Share.share("I have solved the Game of Fifteen's "
+              "${result.size}x${result.size} puzzle in $timeFormatted "
+              "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
+        },
+      ),
+      new FlatButton(
+        child: new Text("Close"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ];
+
+    if (PlayGamesContainer.of(context).isSupported()) {
+      actions.insert(
+        0,
+        new FlatButton(
+          child: new Text("Leaderboard"),
+          onPressed: () {
+            final playGames = PlayGamesContainer.of(context);
+            playGames.showLeaderboard(
+              key: PlayGames.getLeaderboardOfSize(result.size),
+            );
+          },
+        ),
+      );
+    }
+
     return AlertDialog(
       title: Center(
         child: Text(
@@ -70,32 +102,7 @@ class GameVictoryDialog extends StatelessWidget {
           ),
         ],
       ),
-      actions: <Widget>[
-        // usually buttons at the bottom of the dialog
-        new FlatButton(
-          child: new Text("Leaderboard"),
-          onPressed: () {
-            final playGames = PlayGamesContainer.of(context);
-            playGames.showLeaderboard(
-              key: PlayGames.getLeaderboardOfSize(result.size),
-            );
-          },
-        ),
-        new FlatButton(
-          child: new Text("Share"),
-          onPressed: () {
-            Share.share("I have solved the Game of Fifteen's "
-                "${result.size}x${result.size} puzzle in $timeFormatted "
-                "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
-          },
-        ),
-        new FlatButton(
-          child: new Text("Close"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+      actions: actions,
     );
   }
 }

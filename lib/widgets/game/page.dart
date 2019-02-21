@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:fifteenpuzzle/data/result.dart';
 import 'package:fifteenpuzzle/play_games.dart';
-import 'package:fifteenpuzzle/widgets/game/cupertino/page.dart';
 import 'package:fifteenpuzzle/widgets/game/material/page.dart';
 import 'package:fifteenpuzzle/widgets/game/material/victory.dart';
 import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
@@ -24,27 +21,14 @@ class GamePage extends StatelessWidget {
   }
 
   Widget _buildRoot(BuildContext context) {
-    if (Platform.isIOS) {
-      return GameCupertinoPage();
-    } else {
-      // Every other OS is based on a material
-      // design application.
-      return GameMaterialPage();
-    }
+    return GameMaterialPage();
   }
 
   void _showVictoryDialog(BuildContext context, Result result) {
-    if (Platform.isIOS) {
-      showCupertinoDialog(
-        context: context,
-        builder: (context) => Text(''),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => GameVictoryDialog(result: result),
-      );
-    }
+    showDialog(
+      context: context,
+      builder: (context) => GameVictoryDialog(result: result),
+    );
   }
 
   void _submitResult(BuildContext context, Result result) {

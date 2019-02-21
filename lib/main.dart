@@ -19,13 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = 'Game of Fifteen';
-    if (Platform.isIOS) {
-      return _MyCupertinoApp(title: title);
-    } else {
-      // Every other OS is based on a material
-      // design application.
-      return _MyMaterialApp(title: title);
-    }
+    return _MyMaterialApp(title: title);
   }
 }
 
