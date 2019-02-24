@@ -20,8 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.coroutines.resume
 import io.flutter.plugin.common.MethodChannel
 
-
-
 /**
  * @author Artem Chepurnoy
  */
@@ -37,6 +35,7 @@ class PlayGamesPlugin(
         private const val RC_LEADERBOARD_UI = 10002
         private const val RC_ACHIEVEMENT_UI = 10003
 
+        private const val COMMAND_IS_SUPPORTED = "isSupported"
         private const val COMMAND_SIGN_IN = "signIn"
         private const val COMMAND_LEADERBOARD_UI = "showLeaderboard"
         private const val COMMAND_LEADERBOARD_SUBMIT_SCORE = "submitScore"
@@ -57,8 +56,8 @@ class PlayGamesPlugin(
     private val onActivityResultListeners = CopyOnWriteArrayList<OnActivityResultListener>()
 
     override fun onMethodCall(method: MethodCall, result: Result) {
-        android.util.Log.e("FUCK", "shit")
         when (method.method) {
+            COMMAND_IS_SUPPORTED -> result.success(true)
             COMMAND_SIGN_IN -> {
                 GlobalScope.launch(Dispatchers.Main) {
                     val account: GoogleSignInAccount

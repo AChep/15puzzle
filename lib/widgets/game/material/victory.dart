@@ -35,7 +35,7 @@ class GameVictoryDialog extends StatelessWidget {
       ),
     ];
 
-    if (PlayGamesContainer.of(context).isSupported()) {
+    if (PlayGamesContainer.of(context).isSupported) {
       actions.insert(
         0,
         new FlatButton(

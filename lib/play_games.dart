@@ -43,14 +43,31 @@ class PlayGamesContainer extends StatefulWidget {
 class _PlayGamesContainerState extends State<PlayGamesContainer> {
   static const playGames =
       const MethodChannel('com.artemchep.flutter/google_play_games');
+  
+  bool isSupported = false;
 
   @override
   void initState() {
     super.initState();
+    
+    () async {
+      final result = await () async {
+        if (_isSupportedInternal()) {
+          try {
+            return await playGames.invokeMethod("isSupported");
+          } on PlatformException {}
+        }
+        return false;
+      }();
+
+      setState(() {
+        isSupported = result;
+      });
+    }();
   }
 
   void submitScore({@required String key, @required int time}) async {
-    if (isSupported()) {
+    if (_isSupportedInternal()) {
       try {
         await playGames.invokeMethod(
           'submitScore',
@@ -64,7 +81,7 @@ class _PlayGamesContainerState extends State<PlayGamesContainer> {
   }
 
   void showLeaderboard({@required String key}) async {
-    if (isSupported()) {
+    if (_isSupportedInternal()) {
       try {
         await playGames.invokeMethod(
           "showLeaderboard",
@@ -76,7 +93,7 @@ class _PlayGamesContainerState extends State<PlayGamesContainer> {
     }
   }
 
-  bool isSupported() => Platform.isAndroid;
+  bool _isSupportedInternal() => Platform.isAndroid;
 
   // So the WidgetTree is actually
   // AppStateContainer --> InheritedStateContainer --> The rest of an app.
