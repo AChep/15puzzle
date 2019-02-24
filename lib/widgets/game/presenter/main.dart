@@ -63,11 +63,12 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
-    final encrypted = encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
-    final plainText = _encrypter.decrypt(encrypted);
 
     dynamic jsonMap;
     try {
+      final encrypted = encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
+      final plainText = _encrypter.decrypt(encrypted);
+
       jsonMap = json.decode(plainText);
     } catch (FormatException) {
       jsonMap = Map<String, dynamic>();
