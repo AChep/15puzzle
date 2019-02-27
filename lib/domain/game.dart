@@ -15,6 +15,8 @@ abstract class Game {
 
   Board tap(Board board, {@required Point<int> point});
 
+  Point<int> findChipPositionAfterTap(Board board, {@required Point<int> point});
+
   /// Returns the chips that are free to move,
   /// including a chip at the point.
   Iterable<Chip> findChips(Board board, {@required Point<int> point});
@@ -183,6 +185,25 @@ class _GameImpl implements Game {
 
   @override
   Board tap(Board board, {Point<int> point}) {
+    final p = findChipPositionAfterTap(board, point: point);
+    if (p == point) {
+      return board;
+    }
+
+    int dx = p.x - point.x;
+    int dy = p.y - point.y;
+
+    final blank = point;
+    final chips = List.of(board.chips, growable: false);
+    findChips(board, point: point).forEach((chip) {
+      chips[chip.number] = chip.move(chip.currentPoint + Point(dx, dy));
+    });
+
+    return Board(board.size, chips, blank);
+  }
+
+  @override
+  Point<int> findChipPositionAfterTap(Board board, {Point<int> point}) {
     int dx;
     int dy;
     if (point.x == board.blank.x) {
@@ -192,16 +213,10 @@ class _GameImpl implements Game {
       dx = point.x > board.blank.x ? -1 : 1;
       dy = 0;
     } else {
-      return board;
+      return point;
     }
 
-    final blank = point;
-    final chips = List.of(board.chips, growable: false);
-    findChips(board, point: point).forEach((chip) {
-      chips[chip.number] = chip.move(chip.currentPoint + Point(dx, dy));
-    });
-
-    return Board(board.size, chips, blank);
+    return point + Point(dx, dy);
   }
 
   @override
