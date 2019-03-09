@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fifteenpuzzle/widgets/game/format.dart';
 import 'package:fifteenpuzzle/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
@@ -98,12 +99,16 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            timeStr,
-            style: Theme.of(context).textTheme.display3.copyWith(
-                  fontSize: widget.fontSize,
-                  color: Theme.of(context).textTheme.title.color,
-                ),
+          SizedBox(
+            width: 256.0,
+            child: AutoSizeText(
+              timeStr,
+              maxLines: 1,
+              style: Theme.of(context).textTheme.display3.copyWith(
+                    fontSize: widget.fontSize,
+                    color: Theme.of(context).textTheme.title.color,
+                  ),
+            ),
           ),
           const SizedBox(width: 16.0),
           StopwatchIcon(
