@@ -35,8 +35,11 @@ Widget createMoreBottomSheet(
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     final puzzleSize = min(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
+                      min(
+                        constraints.maxWidth,
+                        constraints.maxHeight,
+                      ),
+                      96.0,
                     );
 
                     return BoardWidget(
@@ -106,19 +109,28 @@ Widget createMoreBottomSheet(
     Row(
       children: <Widget>[
         SizedBox(width: 8),
-        Expanded(child: createBoard(size: 3)),
+        createBoard(size: 3),
         Expanded(child: createBoard(size: 4)),
-        Expanded(child: createBoard(size: 5)),
+        createBoard(size: 5),
         SizedBox(width: 8),
       ],
     ),
     SizedBox(height: 16),
   ];
 
-  return new Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: items,
+  return new OrientationBuilder(
+    builder: (context, orientation) {
+      return Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: orientation == Orientation.landscape ? 64.0 : 0.0,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: items,
+        ),
+      );
+    },
   );
 }
