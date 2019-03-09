@@ -77,7 +77,7 @@ Widget createMoreBottomSheet(
           },
         ),
         IconButton(
-          icon: const Icon(Icons.people_outline),
+          icon: const Icon(Icons.code),
           onPressed: () {
             Navigator.of(context).pop();
             launchUrl(url: URL_REPOSITORY);
