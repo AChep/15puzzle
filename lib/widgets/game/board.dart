@@ -126,7 +126,7 @@ class _BoardWidgetState extends State<BoardWidget>
 
   void _startMoveAnimation(Chip chip, Point<int> point) {
     final controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
 
