@@ -14,11 +14,15 @@ class AboutDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const Text('Game of Fifteen is a free and open source app '
-              'written with Flutter.'),
-          const SizedBox(height: 32),
+              'written with Flutter. It features beautiful design and '
+              'smooth animations.'),
+          const SizedBox(height: 8),
+          const Text('You can compete with your friends online. '
+              'The complexity of puzzles is similar from game to game.'),
+          const SizedBox(height: 24),
           Text(
             'Developed by',
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.subtitle,
           ),
           const SizedBox(height: 8),
           ListTile(
@@ -34,15 +38,16 @@ class AboutDialog extends StatelessWidget {
               launchUrl(url: URL_AUTHOR);
             },
           ),
+          ListTile(
+            leading: Icon(Icons.code, size: 32),
+            title: const Text('Join development'),
+            onTap: () {
+              launchUrl(url: URL_REPOSITORY);
+            },
+          ),
         ],
       ),
       actions: <Widget>[
-        new FlatButton(
-          child: new Text("Repository"),
-          onPressed: () {
-            launchUrl(url: URL_REPOSITORY);
-          },
-        ),
         new FlatButton(
           child: new Text("Close"),
           onPressed: () {
