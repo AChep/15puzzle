@@ -20,29 +20,18 @@ class AboutDialog extends StatelessWidget {
           const Text('You can compete with your friends online. '
               'The complexity of puzzles is similar from game to game.'),
           const SizedBox(height: 24),
-          Text(
-            'Developed by',
-            style: Theme.of(context).textTheme.subtitle,
-          ),
-          const SizedBox(height: 8),
           ListTile(
-            leading: ClipOval(
-              child: Image.network(
-                'https://achep-84559.firebaseapp.com/static/avatar.jpg',
-                width: 32,
-                height: 32,
-              ),
-            ),
-            title: const Text('Artem Chepurnoy'),
-            onTap: () {
-              launchUrl(url: URL_AUTHOR);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.code, size: 32),
+            leading: Icon(Icons.code, size: 24),
             title: const Text('Join development'),
             onTap: () {
               launchUrl(url: URL_REPOSITORY);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.bug_report, size: 24),
+            title: const Text('Send bug report'),
+            onTap: () {
+              launchUrl(url: URL_FEEDBACK);
             },
           ),
         ],
