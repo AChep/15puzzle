@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:fifteenpuzzle/config/ui.dart';
 import 'package:fifteenpuzzle/data/board.dart';
-import 'package:fifteenpuzzle/links.dart';
-import 'package:fifteenpuzzle/utils/url.dart';
 import 'package:fifteenpuzzle/widgets/about/dialog.dart';
+import 'package:fifteenpuzzle/widgets/donate/dialog.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
@@ -80,10 +79,14 @@ Widget createMoreBottomSheet(
           },
         ),
         IconButton(
-          icon: const Icon(Icons.code),
+          icon: const Icon(Icons.credit_card),
           onPressed: () {
             Navigator.of(context).pop();
-            launchUrl(url: URL_REPOSITORY);
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return DonateDialog();
+                });
           },
         ),
         Expanded(

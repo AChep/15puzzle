@@ -10,7 +10,7 @@ description: A new Flutter application.
 version: 1.2.3+16
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -21,6 +21,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.5.1
   auto_size_text: ^1.0.0
+  in_app_purchase: ^0.1.0+1
   fluttertoast: ^3.0.1
   url_launcher: ^5.0.1
   share: ^0.6.0
