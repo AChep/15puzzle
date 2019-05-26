@@ -16,7 +16,8 @@ abstract class Game {
 
   Board tap(Board board, {@required Point<int> point});
 
-  Point<int> findChipPositionAfterTap(Board board, {@required Point<int> point});
+  Point<int> findChipPositionAfterTap(Board board,
+      {@required Point<int> point});
 
   /// Returns the chips that are free to move,
   /// including a chip at the point.

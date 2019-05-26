@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppIcon extends StatelessWidget {
-
   final double size;
 
   const AppIcon({this.size}) : super();
@@ -20,9 +19,9 @@ class AppIcon extends StatelessWidget {
           child: Text(
             '15',
             style: Theme.of(context).primaryTextTheme.title.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
-            ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.0,
+                ),
           ),
         ),
       ),

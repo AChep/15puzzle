@@ -43,13 +43,13 @@ class PlayGamesContainer extends StatefulWidget {
 class _PlayGamesContainerState extends State<PlayGamesContainer> {
   static const playGames =
       const MethodChannel('com.artemchep.flutter/google_play_games');
-  
+
   bool isSupported = false;
 
   @override
   void initState() {
     super.initState();
-    
+
     () async {
       final result = await () async {
         if (_isSupportedInternal()) {

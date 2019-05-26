@@ -185,8 +185,7 @@ class GameMaterialPage extends StatelessWidget {
                 showModalBottomSheet<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return createMoreBottomSheet(context,
-                    call: (size) {
+                    return createMoreBottomSheet(context, call: (size) {
                       presenter.resize(size);
                     });
                   },

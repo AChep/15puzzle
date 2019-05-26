@@ -66,7 +66,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
     dynamic jsonMap;
     try {
-      final encrypted = encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
+      final encrypted =
+          encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
       final plainText = _encrypter.decrypt(encrypted);
 
       jsonMap = json.decode(plainText);
@@ -131,7 +132,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     setState(() {
       time = now;
       steps = 0;
-      board = game.shuffle(game.hardest(board), amount: board.size * board.size);
+      board =
+          game.shuffle(game.hardest(board), amount: board.size * board.size);
     });
   }
 
@@ -187,9 +189,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     setState(() {
       int timeFuture;
       if (isPlaying()) {
-        final now = DateTime
-            .now()
-            .millisecondsSinceEpoch;
+        final now = DateTime.now().millisecondsSinceEpoch;
         timeFuture = now;
       } else {
         timeFuture = TIME_STOPPED;
@@ -197,7 +197,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
       var boardFuture;
       if (isPlaying()) {
-        boardFuture = game.shuffle(game.hardest(board), amount: board.size * board.size);
+        boardFuture =
+            game.shuffle(game.hardest(board), amount: board.size * board.size);
       } else {
         boardFuture = _createBoard(board.size);
       }
