@@ -7,7 +7,6 @@ import 'package:fifteenpuzzle/widgets/game/material/steps.dart';
 import 'package:fifteenpuzzle/widgets/game/material/stopwatch.dart';
 import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
 import 'package:fifteenpuzzle/widgets/icons/app.dart';
-import 'package:fifteenpuzzle/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -148,7 +147,23 @@ class GameMaterialPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(width: 64.0),
+        Container(
+          width: 48,
+          height: 48,
+          child: Material(
+            elevation: 0.0,
+            color: Colors.transparent,
+            shape: CircleBorder(),
+            child: InkWell(
+              onTap: () {
+                presenter.reset();
+              },
+              customBorder: CircleBorder(),
+              child: Icon(Icons.refresh),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16.0),
         GamePlayStopButton(
           isPlaying: presenter.isPlaying(),
           onTap: () {

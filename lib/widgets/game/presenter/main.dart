@@ -181,6 +181,33 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     });
   }
 
+  /// Resets the board, keeping the `isPlaying` state
+  /// the same.
+  void reset() {
+    setState(() {
+      int timeFuture;
+      if (isPlaying()) {
+        final now = DateTime
+            .now()
+            .millisecondsSinceEpoch;
+        timeFuture = now;
+      } else {
+        timeFuture = TIME_STOPPED;
+      }
+
+      var boardFuture;
+      if (isPlaying()) {
+        boardFuture = game.shuffle(game.hardest(board), amount: board.size * board.size);
+      } else {
+        boardFuture = _createBoard(board.size);
+      }
+
+      time = timeFuture;
+      steps = 0;
+      board = boardFuture;
+    });
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
