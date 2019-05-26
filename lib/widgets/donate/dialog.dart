@@ -193,6 +193,10 @@ class _DonateDialogState extends State<DonateDialog> {
             trailing: previousPurchase != null
                 ? Icon(Icons.check)
                 : FlatButton(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          const BorderRadius.all(const Radius.circular(16.0)),
+                    ),
                     child: Text(productDetails.price),
                     color: Colors.green[800],
                     textColor: Colors.white,
@@ -211,9 +215,7 @@ class _DonateDialogState extends State<DonateDialog> {
       },
     ));
 
-    return Card(
-      child: Column(children: productList),
-    );
+    return Column(children: productList);
   }
 
   void showPendingUI() {
