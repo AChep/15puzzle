@@ -232,7 +232,7 @@ class _DonateDialogState extends State<DonateDialog> {
     });
   }
 
-  void handleError(PurchaseError error) {
+  void handleError(IAPError error) {
     setState(() {
       _purchasePending = false;
     });

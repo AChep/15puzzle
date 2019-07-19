@@ -39,7 +39,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   /// Encrypter to protected saved states of the game and
   /// make hacking a lil bit harder.
-  final _encrypter = encrypt.Encrypter(encrypt.Salsa20(_SALSA_KEY, _SALSA_IV));
+  final _encrypter = encrypt.Encrypter(encrypt.Salsa20(_SALSA_KEY));
 
   final Game game = Game.instance;
 
@@ -68,7 +68,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     try {
       final encrypted =
           encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
-      final plainText = _encrypter.decrypt(encrypted);
+      final plainText = _encrypter.decrypt(encrypted, iv: _SALSA_IV);
 
       jsonMap = json.decode(plainText);
     } catch (FormatException) {
@@ -244,7 +244,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     serializer.writeSerializable(board);
 
     final plainText = serializer.toJsonString();
-    final encryptedText = _encrypter.encrypt(plainText).base64;
+    final encryptedText = _encrypter.encrypt(plainText, iv: _SALSA_IV).base64;
     prefs.setString(_KEY_STATE, encryptedText);
   }
 
