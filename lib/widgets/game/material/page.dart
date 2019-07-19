@@ -125,8 +125,11 @@ class GameMaterialPage extends StatelessWidget {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             final puzzleSize = min(
-              constraints.maxWidth,
-              constraints.maxHeight,
+              min(
+                constraints.maxWidth,
+                constraints.maxHeight,
+              ),
+              400.0,
             );
 
             return BoardWidget(
