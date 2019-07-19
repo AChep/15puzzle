@@ -183,9 +183,15 @@ class _DonateDialogState extends State<DonateDialog> {
     productList.addAll(_products.map(
       (ProductDetails productDetails) {
         PurchaseDetails previousPurchase = purchases[productDetails.id];
+        String title = productDetails.title;
+        int titleIndex = title.indexOf('(');
+        if (titleIndex != -1) {
+          title = title.substring(0, titleIndex);
+        }
+
         return ListTile(
             title: Text(
-              productDetails.title,
+              title,
             ),
             subtitle: Text(
               productDetails.description,
