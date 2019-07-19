@@ -171,7 +171,9 @@ class PlayGamesPlugin(
             // Try to sign in silently
             signInClient
                 .silentSignIn()
-                .addOnSuccessListener(continuation::resume)
+                .addOnSuccessListener {
+                    continuation.resume(it)
+                }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Failed to silent sign-in, trying explicit sign-in", e)
                     // Create on activity result listener and
