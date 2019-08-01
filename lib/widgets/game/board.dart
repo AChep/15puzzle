@@ -34,6 +34,31 @@ class _BoardWidgetState extends State<BoardWidget>
   static const _ANIM_MOVE_TAG = "move";
   static const _ANIM_SCALE_TAG = "scale";
 
+  static const double _kFriction = 0.015;
+
+  static final double _kDecelerationRate = log(0.78) / log(0.9);
+
+  static const double _initialVelocityPenetration = 3.065;
+
+  static double _decelerationForFriction(double friction) {
+    return friction * 61774.04968;
+  }
+
+  static double _flingDuration({double friction: _kFriction, double velocity}) {
+    // See mPhysicalCoeff
+    final double scaledFriction = friction * _decelerationForFriction(0.84);
+
+    // See getSplineDeceleration().
+    final double deceleration = log(0.35 * velocity.abs() / scaledFriction);
+
+    return exp(deceleration / (_kDecelerationRate - 1.0));
+  }
+
+  static double _flingOffset({double friction: _kFriction, double velocity}) {
+    var _duration = _flingDuration(friction: friction, velocity: velocity);
+    return velocity * _duration / _initialVelocityPenetration;
+  }
+
   List<_Chip> chips;
 
   Function(double, double) _onPanEndDelegate;
@@ -464,13 +489,22 @@ class _BoardWidgetState extends State<BoardWidget>
     //
 
     _onPanEndDelegate = (double vx, double vy) {
-      // TODO: Use the velocity to preform a fling.
+      final offsetX = _flingOffset(velocity: vx);
+      final offsetY = _flingOffset(velocity: vy);
+      final x = max(
+          min(activeChip.x * boardWidgetSize + offsetX, toPointScaled.x),
+          fromPointScaled.x) /
+          boardWidgetSize;
+      final y = max(
+          min(activeChip.y * boardWidgetSize + offsetY, toPointScaled.y),
+          fromPointScaled.y) /
+          boardWidgetSize;
 
       // Convert this gesture into a single tap
       // and clean-up delegates.
       final newTouchChipPoint = Point(
-        (activeChip.x * board.size).round(),
-        (activeChip.y * board.size).round(),
+        (x * board.size).round(),
+        (y * board.size).round(),
       );
 
       if (newTouchChipPoint != activeChip.currentPoint) {
