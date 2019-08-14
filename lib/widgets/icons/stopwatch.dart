@@ -44,19 +44,18 @@ class _StopwatchPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = min(size.width, size.height) / 2;
     canvas.drawCircle(center, radius, stopwatchPaint);
+    canvas.translate(center.dx, center.dy);
 
     final o = Offset(0, 0);
 
     // Minutes
     canvas.save();
-    canvas.translate(radius, radius);
     canvas.rotate(_calculateMinuteHandRotation(millis));
     canvas.drawLine(o, o.translate(0, -radius / 1.7 + 2), stopwatchPaint);
     canvas.restore();
 
     // Seconds
     canvas.save();
-    canvas.translate(radius, radius);
     canvas.rotate(_calculateSecondHandRotation(millis));
     canvas.drawLine(o, o.translate(0, -radius / 1.25 + 2), stopwatchPaint);
     canvas.restore();
