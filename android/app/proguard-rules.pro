@@ -17,3 +17,5 @@
 }
 
 -dontwarn kotlinx.atomicfu.AtomicBoolean
+
+-dontwarn android.**
