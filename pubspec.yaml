@@ -55,6 +55,22 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.io/assets-and-images/#from-packages
 
+  fonts:
+    - family: ManRope
+      fonts:
+        - asset: fonts/ManRope/manrope-thin.ttf
+          weight: 100
+        - asset: fonts/ManRope/manrope-light.ttf
+          weight: 300
+        - asset: fonts/ManRope/manrope-regular.ttf
+          weight: 400
+        - asset: fonts/ManRope/manrope-medium.ttf
+          weight: 500
+        - asset: fonts/ManRope/manrope-bold.ttf
+          weight: 700
+        - asset: fonts/ManRope/manrope-extrabold.ttf
+          weight: 900
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

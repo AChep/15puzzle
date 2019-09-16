@@ -81,6 +81,9 @@ class _MyMaterialApp extends _MyPlatformApp {
             borderRadius: BorderRadius.all(Radius.circular(16.0)),
           ),
         ),
+        textTheme: theme.textTheme.apply(fontFamily: 'ManRope'),
+        primaryTextTheme: theme.primaryTextTheme.apply(fontFamily: 'ManRope'),
+        accentTextTheme: theme.accentTextTheme.apply(fontFamily: 'ManRope'),
       ),
       home: GamePage(),
     );
