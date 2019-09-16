@@ -100,7 +100,7 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SizedBox(
-            width: 256.0,
+            width: 220.0,
             child: AutoSizeText(
               timeStr,
               maxLines: 1,

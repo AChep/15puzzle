@@ -25,7 +25,7 @@ class GameMaterialPage extends StatelessWidget {
             ? screenSize.height
             : screenSize.width;
 
-    final isTallScreen = screenHeight / screenWidth > 1.9;
+    final isTallScreen = screenHeight > 800 || screenHeight / screenWidth > 1.9;
     final isLargeScreen = screenWidth > 400;
 
     final fabWidget = _buildFab(context);
@@ -73,12 +73,17 @@ class GameMaterialPage extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(height: 0),
+                const SizedBox(height: 32.0),
+                Center(
+                  child: statusWidget,
+                ),
+                const SizedBox(height: 32.0),
                 Expanded(
-                  child: Center(
-                    child: statusWidget,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: boardWidget,
                   ),
                 ),
-                boardWidget,
                 isLargeScreen && isTallScreen
                     ? const SizedBox(height: 116.0)
                     : const SizedBox(height: 72.0),
@@ -96,10 +101,15 @@ class GameMaterialPage extends StatelessWidget {
         return Scaffold(
           body: SafeArea(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                boardWidget,
-                statusWidget,
+                Expanded(
+                  child: boardWidget,
+                  flex: 3,
+                ),
+                Expanded(
+                  child: statusWidget,
+                  flex: 2,
+                ),
               ],
             ),
           ),
@@ -129,7 +139,7 @@ class GameMaterialPage extends StatelessWidget {
                 constraints.maxWidth,
                 constraints.maxHeight,
               ),
-              400.0,
+              360.0,
             );
 
             return BoardWidget(
