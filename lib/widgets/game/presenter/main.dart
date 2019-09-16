@@ -62,10 +62,10 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
   }
 
   void _loadState() async {
-    final prefs = await SharedPreferences.getInstance();
-
     dynamic jsonMap;
     try {
+      final prefs = await SharedPreferences.getInstance();
+
       final encrypted =
           encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
       final plainText = _encrypter.decrypt(encrypted, iv: _SALSA_IV);
@@ -215,7 +215,9 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.suspending:
-        _saveState();
+        try {
+          _saveState();
+        } on Exception {}
         break;
       default:
         break;

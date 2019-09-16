@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:fifteenpuzzle/config/ui.dart';
@@ -78,17 +79,18 @@ Widget createMoreBottomSheet(
                 });
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.credit_card),
-          onPressed: () {
-            Navigator.of(context).pop();
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return DonateDialog();
-                });
-          },
-        ),
+        if (Platform.isAndroid || Platform.isIOS)
+          IconButton(
+            icon: const Icon(Icons.credit_card),
+            onPressed: () {
+              Navigator.of(context).pop();
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return DonateDialog();
+                  });
+            },
+          ),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,

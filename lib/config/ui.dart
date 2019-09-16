@@ -35,7 +35,12 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
   }
 
   void _loadPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } on Exception {
+      return;
+    }
     _loadThemePreferences(prefs);
   }
 
@@ -52,8 +57,10 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
     // Save the choice if we
     // want to.
     if (save) {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setBool(_KEY_USE_DARK_THEME, useDarkTheme);
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool(_KEY_USE_DARK_THEME, useDarkTheme);
+      } on Exception {}
     }
 
     setState(() {
