@@ -214,7 +214,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     switch (state) {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-      case AppLifecycleState.suspending:
+      case AppLifecycleState.detached:
         try {
           _saveState();
         } on Exception {}
