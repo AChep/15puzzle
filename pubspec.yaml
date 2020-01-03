@@ -27,6 +27,7 @@ dependencies:
   share: ^0.6.3+5
   color: ^2.1.1
   encrypt: ^4.0.0
+  native_device_orientation: ^0.3.0
 
 dev_dependencies:
   flutter_test:

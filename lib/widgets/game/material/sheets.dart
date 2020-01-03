@@ -8,6 +8,7 @@ import 'package:fifteenpuzzle/widgets/donate/dialog.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
+import 'package:native_device_orientation/native_device_orientation.dart';
 
 Widget createMoreBottomSheet(
   BuildContext context, {
@@ -123,6 +124,25 @@ Widget createMoreBottomSheet(
     SizedBox(height: 16),
   ];
 
+  return NativeDeviceOrientationReader(
+    builder: (context) {
+      final orientation = NativeDeviceOrientationReader.orientation(context);
+      return Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: orientation == NativeDeviceOrientation.landscapeLeft ||
+                  orientation == NativeDeviceOrientation.landscapeRight
+              ? 64.0
+              : 0.0,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: items,
+        ),
+      );
+    },
+  );
   return new OrientationBuilder(
     builder: (context, orientation) {
       return Container(

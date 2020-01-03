@@ -77,7 +77,7 @@ class GameMaterialPage extends StatelessWidget {
                 Center(
                   child: statusWidget,
                 ),
-                const SizedBox(height: 32.0),
+                const SizedBox(height: 16.0),
                 Expanded(
                   child: Align(
                     alignment: Alignment.bottomCenter,
