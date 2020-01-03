@@ -115,9 +115,19 @@ Widget createMoreBottomSheet(
     Row(
       children: <Widget>[
         SizedBox(width: 8),
-        createBoard(size: 3),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: createBoard(size: 3),
+          ),
+        ),
         Expanded(child: createBoard(size: 4)),
-        createBoard(size: 5),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: createBoard(size: 5),
+          ),
+        ),
         SizedBox(width: 8),
       ],
     ),
@@ -133,21 +143,6 @@ Widget createMoreBottomSheet(
                   orientation == NativeDeviceOrientation.landscapeRight
               ? 64.0
               : 0.0,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: items,
-        ),
-      );
-    },
-  );
-  return new OrientationBuilder(
-    builder: (context, orientation) {
-      return Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: orientation == Orientation.landscape ? 64.0 : 0.0,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
