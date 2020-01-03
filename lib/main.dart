@@ -62,7 +62,14 @@ class _MyMaterialApp extends _MyPlatformApp {
     final overlay = ui.useDarkTheme
         ? SystemUiOverlayStyle.light
         : SystemUiOverlayStyle.dark;
-    final theme = ui.useDarkTheme ? ThemeData.dark() : ThemeData.light();
+    final theme = ui.useDarkTheme
+        ? ThemeData(
+            brightness: Brightness.dark,
+            canvasColor: Color(0xFF121212),
+            backgroundColor: Color(0xFF121212),
+            cardColor: Color(0xFF1E1E1E),
+          )
+        : ThemeData.light();
 
     SystemChrome.setSystemUIOverlayStyle(
       overlay.copyWith(
