@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fifteenpuzzle/widgets/auto_size_text.dart';
 import 'package:fifteenpuzzle/widgets/game/format.dart';
 import 'package:fifteenpuzzle/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +86,7 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
         ? DateTime.now().millisecondsSinceEpoch - widget.time
         : 0;
     final timeStr = widget.timeFormatter(time);
+    final timeStrAtStartOfMinute = widget.timeFormatter(time - time % (1000 * 60));
 
     return AnimatedBuilder(
       animation: animation,
@@ -101,7 +102,9 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
         children: <Widget>[
           SizedBox(
             width: 220.0,
+            height: 108.0,
             child: AutoSizeText(
+              timeStrAtStartOfMinute,
               timeStr,
               maxLines: 1,
               style: Theme.of(context).textTheme.display3.copyWith(
