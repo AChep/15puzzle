@@ -107,13 +107,19 @@ class GameMaterialPage extends StatelessWidget {
                   flex: 3,
                 ),
                 Expanded(
-                  child: statusWidget,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      statusWidget,
+                      SizedBox(height: 48.0),
+                      fabWidget,
+                    ],
+                  ),
                   flex: 2,
                 ),
               ],
             ),
           ),
-          floatingActionButton: fabWidget,
         );
       }
     });
