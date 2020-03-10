@@ -16,6 +16,10 @@ The Game of Fifteen (also called 15-puzzle, Gem Puzzle, Boss Puzzle, Mystic Squa
   <img alt="Get Game of Fifteen on Google Play" vspace="20"
        src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60" />
 </a>
+<a href="htts://15puzzle.artemchep.com">
+  <img alt="Try online" vspace="20"
+       src="https://github.com/AChep/15puzzle/raw/master/artwork/web_page.png" height="60" />
+</a>
 
 Report a bug or request a feature
 ----------------
