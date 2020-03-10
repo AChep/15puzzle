@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fifteenpuzzle/config/ui.dart';
 import 'package:fifteenpuzzle/play_games.dart';
+import 'package:fifteenpuzzle/utils/platform.dart';
 import 'package:fifteenpuzzle/widgets/game/page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -24,15 +25,11 @@ void main() {
 /// Otherwise, do nothing.
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
-  // Web has no Platform file, so we need to wrap it
-  // with try catch.
-  try {
-    if (Platform.isMacOS) {
-      targetPlatform = TargetPlatform.iOS;
-    } else if (Platform.isLinux || Platform.isWindows) {
-      targetPlatform = TargetPlatform.android;
-    }
-  } catch (e) {}
+  if (platformCheck(() => Platform.isMacOS)) {
+    targetPlatform = TargetPlatform.iOS;
+  } else if (platformCheck(() => Platform.isLinux || Platform.isWindows)) {
+    targetPlatform = TargetPlatform.android;
+  }
   if (targetPlatform != null) {
     debugDefaultTargetPlatformOverride = targetPlatform;
   }

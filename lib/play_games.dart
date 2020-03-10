@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fifteenpuzzle/utils/platform.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -93,7 +94,7 @@ class _PlayGamesContainerState extends State<PlayGamesContainer> {
     }
   }
 
-  bool _isSupportedInternal() => Platform.isAndroid;
+  bool _isSupportedInternal() => platformCheck(() => Platform.isAndroid);
 
   // So the WidgetTree is actually
   // AppStateContainer --> InheritedStateContainer --> The rest of an app.

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:fifteenpuzzle/config/ui.dart';
 import 'package:fifteenpuzzle/data/board.dart';
+import 'package:fifteenpuzzle/utils/platform.dart';
 import 'package:fifteenpuzzle/widgets/about/dialog.dart';
 import 'package:fifteenpuzzle/widgets/donate/dialog.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
@@ -80,7 +81,7 @@ Widget createMoreBottomSheet(
                 });
           },
         ),
-        if (Platform.isAndroid || Platform.isIOS)
+        if (platformCheck(() => Platform.isAndroid || Platform.isIOS))
           IconButton(
             icon: const Icon(Icons.credit_card),
             onPressed: () {
