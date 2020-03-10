@@ -135,9 +135,8 @@ Widget createMoreBottomSheet(
     SizedBox(height: 16),
   ];
 
-  return NativeDeviceOrientationReader(
-    builder: (context) {
-      final orientation = NativeDeviceOrientationReader.orientation(context);
+  return _nativeDeviceOrientationReader(
+    builder: (orientation) {
       return Container(
         margin: EdgeInsets.symmetric(
           horizontal: orientation == NativeDeviceOrientation.landscapeLeft ||
@@ -152,6 +151,21 @@ Widget createMoreBottomSheet(
           children: items,
         ),
       );
+    },
+  );
+}
+
+Widget _nativeDeviceOrientationReader({
+  Widget Function(NativeDeviceOrientation) builder,
+}) {
+  if (platformCheckIsWeb()) {
+    return builder(NativeDeviceOrientation.landscapeLeft);
+  }
+
+  return NativeDeviceOrientationReader(
+    builder: (context) {
+      final orientation = NativeDeviceOrientationReader.orientation(context);
+      return builder(orientation);
     },
   );
 }
