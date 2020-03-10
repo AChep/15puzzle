@@ -24,11 +24,15 @@ void main() {
 /// Otherwise, do nothing.
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
-  if (Platform.isMacOS) {
-    targetPlatform = TargetPlatform.iOS;
-  } else if (Platform.isLinux || Platform.isWindows) {
-    targetPlatform = TargetPlatform.android;
-  }
+  // Web has no Platform file, so we need to wrap it
+  // with try catch.
+  try {
+    if (Platform.isMacOS) {
+      targetPlatform = TargetPlatform.iOS;
+    } else if (Platform.isLinux || Platform.isWindows) {
+      targetPlatform = TargetPlatform.android;
+    }
+  } catch (e) {}
   if (targetPlatform != null) {
     debugDefaultTargetPlatformOverride = targetPlatform;
   }
