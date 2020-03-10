@@ -8,9 +8,12 @@ import 'package:fifteenpuzzle/widgets/game/material/stopwatch.dart';
 import 'package:fifteenpuzzle/widgets/game/presenter/main.dart';
 import 'package:fifteenpuzzle/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class GameMaterialPage extends StatelessWidget {
+  final FocusNode _boardFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     final presenter = GamePresenterWidget.of(context);
@@ -148,12 +151,50 @@ class GameMaterialPage extends StatelessWidget {
               360.0,
             );
 
-            return BoardWidget(
-              board: presenter.board,
-              size: puzzleSize,
-              onTap: (point) {
-                presenter.tap(point: point);
+            return RawKeyboardListener(
+              autofocus: true,
+              focusNode: _boardFocus,
+              onKey: (event) {
+                if (!(event is RawKeyDownEvent)) {
+                  return;
+                }
+
+                int offsetY = 0;
+                int offsetX = 0;
+                switch (event.logicalKey.keyId) {
+                  case 0x100070052: // arrow up
+                    offsetY = 1;
+                    break;
+                  case 0x100070050: // arrow left
+                    offsetX = 1;
+                    break;
+                  case 0x10007004f: // arrow right
+                    offsetX = -1;
+                    break;
+                  case 0x100070051: // arrow down
+                    offsetY = -1;
+                    break;
+                  default:
+                    return;
+                }
+                final tapPoint =
+                    presenter.board.blank + Point(offsetX, offsetY);
+                if (tapPoint.x < 0 ||
+                    tapPoint.x >= presenter.board.size ||
+                    tapPoint.y < 0 ||
+                    tapPoint.y >= presenter.board.size) {
+                  return;
+                }
+
+                presenter.tap(point: tapPoint);
               },
+              child: BoardWidget(
+                board: presenter.board,
+                size: puzzleSize,
+                onTap: (point) {
+                  presenter.tap(point: point);
+                },
+              ),
             );
           },
         ),
