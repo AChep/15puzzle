@@ -1,10 +1,9 @@
-name: Flutter CI
+name: Upload release artefacts
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -16,18 +15,35 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+    - id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF:10}
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '1.12.x'
-        channel: 'beta'
+        flutter-version: '1.15.x'
+        channel: 'dev'
+    - name: Copy secrets
+      run: |
+        cd android/app
+        echo ${{ secrets.KEYSTORE_B64 }} | base64 -d | zcat >> 15puzzle-release.jks
+        echo ${{ secrets.KEYSTORE_PROPS_B64 }} | base64 -d | zcat >> 15puzzle-release.properties
+        cd ..
+        cd ..
     - name: Upgrade flutter
       run: flutter upgrade
     - name: Enable web
       run: flutter config --enable-web
     - name: Install dependencies
       run: flutter packages get
-    - name: Build web
-      run: flutter build web
+    - name: Build
+      run: |
+        flutter build web
+        flutter build apk --release --flavor=playStore --target-platform android-arm,android-arm64,android-x64 --split-per-abi || true
+    - name: Compress web
+      run: |
+        cd build
+        zip -r web.zip web
+        cd ..
+        mv build/web.zip web.zip
     - name: Deploy web
       run: |
         cd build/web
@@ -39,3 +55,39 @@ jobs:
         git add .
         git commit -m "Updated web build"
         git push --force rorigin gh-pages
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload release android-armeabi-v7a
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/apk/playStore/release/app-playStore-armeabi-v7a-release.apk
+        asset_name: 15puzzle-android-armeabi-v7a-${{ steps.vars.outputs.tag }}.apk
+        asset_content_type: application/zip
+    - name: Upload release android-arm64-v8a
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/apk/playStore/release/app-playStore-arm64-v8a-release.apk
+        asset_name: 15puzzle-android-arm64-v8a-${{ steps.vars.outputs.tag }}.apk
+        asset_content_type: application/zip
+    - name: Upload release android-x86_64
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/app/outputs/apk/playStore/release/app-playStore-x86_64-release.apk
+        asset_name: 15puzzle-android-x86_64-${{ steps.vars.outputs.tag }}.apk
+        asset_content_type: application/zip
+    - name: Upload release web
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: web.zip
+        asset_name: 15puzzle-web-${{ steps.vars.outputs.tag }}.zip
+        asset_content_type: application/zip

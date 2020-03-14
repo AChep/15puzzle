@@ -1,5 +1,4 @@
-Game of Fifteen
-[![Codemagic build status](https://api.codemagic.io/apps/5c88cb243bcac07f80e4a1ec/5c88cb243bcac07f80e4a1eb/status_badge.svg)](https://codemagic.io/apps/5c88cb243bcac07f80e4a1ec/5c88cb243bcac07f80e4a1eb/latest_build)
+Game of Fifteen 
 ==========
 
 <img alt="Main screen: Light" align="right" height="400"
