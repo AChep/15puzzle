@@ -53,7 +53,7 @@ jobs:
         git init
         git config user.name  "Artem Bot"
         git config user.email "artemchep@gmail.com"
-        git remote add rorigin https://${{ secrets.TOKEN }}@github.com/AChep/15puzzle.git
+        git remote add origin https://${{ secrets.TOKEN }}@github.com/AChep/15puzzle.git
         git checkout -b gh-pages
         git add .
         git commit -m "Updated web build"
