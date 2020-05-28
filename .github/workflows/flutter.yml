@@ -57,7 +57,7 @@ jobs:
         git checkout -b gh-pages
         git add .
         git commit -m "Updated web build"
-        git push --force rorigin gh-pages
+        git push --force origin gh-pages
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
