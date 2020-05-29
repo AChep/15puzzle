@@ -2,6 +2,7 @@ import 'package:fifteenpuzzle/links.dart';
 import 'package:fifteenpuzzle/utils/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:package_info/package_info.dart';
 
 class AboutDialog extends StatelessWidget {
   @override
@@ -43,6 +44,26 @@ class AboutDialog extends StatelessWidget {
             launchUrl(url: URL_FEEDBACK);
           },
         ),
+        const SizedBox(height: 24),
+        FutureBuilder<PackageInfo>(
+          future: PackageInfo.fromPlatform(),
+          builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+            String text;
+            if (snapshot.data != null) {
+              final buildVersion = snapshot.data.version;
+              final buildNumber = snapshot.data.buildNumber;
+              text = 'Game of Fifteen v' + buildVersion + "-" + buildNumber;
+            } else {
+              text = 'Game of Fifteen, web version';
+            }
+            return HorizontalPadding(
+              Text(
+                text,
+                style: Theme.of(context).textTheme.caption,
+              ),
+            );
+          },
+        )
       ],
     );
   }
