@@ -82,9 +82,11 @@ class _BoardWidgetState extends State<BoardWidget>
   /// Applies normal/speed run duration modifiers */
   int _applyAnimationMultiplier(int duration) {
     if (_isSpeedRunModeEnabled) {
-      return duration * _ANIM_DURATION_MULTIPLIER_SPEED_RUN;
+      return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_SPEED_RUN)
+          .toInt();
     } else
-      return duration * _ANIM_DURATION_MULTIPLIER_NORMAL;
+      return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_NORMAL)
+          .toInt();
   }
 
   @override
