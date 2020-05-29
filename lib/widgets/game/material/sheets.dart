@@ -7,9 +7,9 @@ import 'package:fifteenpuzzle/utils/platform.dart';
 import 'package:fifteenpuzzle/widgets/about/dialog.dart';
 import 'package:fifteenpuzzle/widgets/donate/dialog.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
+import 'package:fifteenpuzzle/widgets/game/material/page.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
-import 'package:native_device_orientation/native_device_orientation.dart';
 
 Widget createMoreBottomSheet(
   BuildContext context, {
@@ -135,37 +135,29 @@ Widget createMoreBottomSheet(
     SizedBox(height: 16),
   ];
 
-  return _nativeDeviceOrientationReader(
-    builder: (orientation) {
-      return Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: orientation == NativeDeviceOrientation.landscapeLeft ||
-                  orientation == NativeDeviceOrientation.landscapeRight
-              ? 64.0
-              : 0.0,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: items,
-        ),
-      );
-    },
-  );
-}
+  return SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+    child: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final width = min(
+          constraints.maxWidth,
+          GameMaterialPage.kMaxBoardSize,
+        );
 
-Widget _nativeDeviceOrientationReader({
-  Widget Function(NativeDeviceOrientation) builder,
-}) {
-  if (platformCheckIsWeb()) {
-    return builder(NativeDeviceOrientation.landscapeLeft);
-  }
-
-  return NativeDeviceOrientationReader(
-    builder: (context) {
-      final orientation = NativeDeviceOrientationReader.orientation(context);
-      return builder(orientation);
-    },
+        return Column(
+          children: [
+            Container(
+              width: width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: items,
+              ),
+            ),
+          ],
+        );
+      },
+    ),
   );
 }

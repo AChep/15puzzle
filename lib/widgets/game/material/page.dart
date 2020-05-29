@@ -12,6 +12,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class GameMaterialPage extends StatelessWidget {
+  /// Maximum size of the board,
+  /// in pixels.
+  static const kMaxBoardSize = 400.0;
+
+  static const kBoardMargin = 16.0;
+
+  static const kBoardPadding = 4.0;
+
   final FocusNode _boardFocus = FocusNode();
 
   @override
@@ -135,8 +143,8 @@ class GameMaterialPage extends StatelessWidget {
         : Colors.black12;
     return Center(
       child: Container(
-        margin: EdgeInsets.all(16.0),
-        padding: EdgeInsets.all(4.0),
+        margin: EdgeInsets.all(kBoardMargin),
+        padding: EdgeInsets.all(kBoardPadding),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(16.0),
@@ -148,7 +156,7 @@ class GameMaterialPage extends StatelessWidget {
                 constraints.maxWidth,
                 constraints.maxHeight,
               ),
-              360.0,
+              kMaxBoardSize - (kBoardMargin + kBoardPadding) * 2,
             );
 
             return RawKeyboardListener(
@@ -244,6 +252,7 @@ class GameMaterialPage extends StatelessWidget {
                 // tap on "More" icon.
                 showModalBottomSheet<void>(
                   context: context,
+                  isScrollControlled: true,
                   builder: (BuildContext context) {
                     return createMoreBottomSheet(context, call: (size) {
                       presenter.resize(size);
