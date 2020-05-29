@@ -133,6 +133,17 @@ Widget createMoreBottomSheet(
       ],
     ),
     SizedBox(height: 16),
+    CheckboxListTile(
+      dense: true,
+      title: const Text('Speed run mode'),
+      secondary: const Icon(Icons.timer),
+      subtitle: const Text('Reduces animations and switches controls to taps'),
+      value: config.isSpeedRunModeEnabled,
+      onChanged: (bool value) {
+        var shouldEnableSpeedRun = !config.isSpeedRunModeEnabled;
+        config.setSpeedRunModeEnabled(shouldEnableSpeedRun, save: true);
+      },
+    ),
   ];
 
   return SingleChildScrollView(

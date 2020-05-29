@@ -16,11 +16,14 @@ class BoardWidget extends StatefulWidget {
 
   final Function(Point<int>) onTap;
 
+  final bool isSpeedRunModeEnabled;
+
   BoardWidget({
     Key key,
     @required this.board,
     @required this.size,
     this.showNumbers = true,
+    this.isSpeedRunModeEnabled = false,
     this.onTap,
   }) : super(key: key);
 
@@ -35,14 +38,13 @@ class _BoardWidgetState extends State<BoardWidget>
   static const _ANIM_MOVE_TAG = "move";
   static const _ANIM_SCALE_TAG = "scale";
 
-  static const int _ANIM_DURATION_MULTIPLIER = 1;
+  static const num _ANIM_DURATION_MULTIPLIER_NORMAL = 1.0;
+  static const num _ANIM_DURATION_MULTIPLIER_SPEED_RUN = 0.6;
 
-  static const int _ANIM_DURATION_BLINK_HALF = 200 * _ANIM_DURATION_MULTIPLIER;
-  static const int _ANIM_DURATION_MOVE = 400 * _ANIM_DURATION_MULTIPLIER;
-  static const int _ANIM_DURATION_COLOR_BACKGROUND =
-      200 * _ANIM_DURATION_MULTIPLIER;
-  static const int _ANIM_DURATION_COLOR_OVERLAY =
-      1200 * _ANIM_DURATION_MULTIPLIER;
+  static const int _ANIM_DURATION_BLINK_HALF = 200;
+  static const int _ANIM_DURATION_MOVE = 400;
+  static const int _ANIM_DURATION_COLOR_BACKGROUND = 200;
+  static const int _ANIM_DURATION_COLOR_OVERLAY = 1200;
 
   static const double _kFriction = 0.015;
 
@@ -75,9 +77,20 @@ class _BoardWidgetState extends State<BoardWidget>
 
   Function(double, double) _onPanUpdateDelegate;
 
+  bool _isSpeedRunModeEnabled;
+
+  /// Applies normal/speed run duration modifiers */
+  int _applyAnimationMultiplier(int duration) {
+    if (_isSpeedRunModeEnabled) {
+      return duration * _ANIM_DURATION_MULTIPLIER_SPEED_RUN;
+    } else
+      return duration * _ANIM_DURATION_MULTIPLIER_NORMAL;
+  }
+
   @override
   void initState() {
     super.initState();
+    _isSpeedRunModeEnabled = widget.isSpeedRunModeEnabled;
     _performSetBoard(
       newBoard: widget.board,
     );
@@ -86,6 +99,9 @@ class _BoardWidgetState extends State<BoardWidget>
   @override
   void didUpdateWidget(BoardWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    setState(() {
+      _isSpeedRunModeEnabled = widget.isSpeedRunModeEnabled;
+    });
     _performSetBoard(
       newBoard: widget.board,
       oldBoard: oldWidget.board,
@@ -129,8 +145,7 @@ class _BoardWidgetState extends State<BoardWidget>
 
             // Change the color of the chip.
             final color =
-            HSLColor.fromAHSL(1, hueStep * chip.number, 0.7, 0.5)
-                .toColor();
+                HSLColor.fromAHSL(1, hueStep * chip.number, 0.7, 0.5).toColor();
             _startColorBackgroundAnimation(
               chip,
               from: extra.backgroundColor,
@@ -206,7 +221,8 @@ class _BoardWidgetState extends State<BoardWidget>
   // ---- Change the size of the board ----
 
   void _startAppearAnimation(Chip chip) {
-    final duration = const Duration(milliseconds: _ANIM_DURATION_BLINK_HALF);
+    final duration = Duration(
+        milliseconds: _applyAnimationMultiplier(_ANIM_DURATION_BLINK_HALF));
     final curve = Curves.easeIn;
 
     final controller = AnimationController(
@@ -233,8 +249,9 @@ class _BoardWidgetState extends State<BoardWidget>
   }
 
   void _startColorBackgroundAnimation(Chip chip, {Color from, Color to}) {
-    final duration =
-        const Duration(milliseconds: _ANIM_DURATION_COLOR_BACKGROUND);
+    final duration = Duration(
+        milliseconds:
+            _applyAnimationMultiplier(_ANIM_DURATION_COLOR_BACKGROUND));
     final curve = Curves.easeIn;
 
     final controller = AnimationController(
@@ -282,7 +299,8 @@ class _BoardWidgetState extends State<BoardWidget>
 
   void _startMoveAnimation(Chip chip, Point<int> point) {
     final controller = AnimationController(
-      duration: const Duration(milliseconds: _ANIM_DURATION_MOVE),
+      duration: Duration(
+          milliseconds: _applyAnimationMultiplier(_ANIM_DURATION_MOVE)),
       vsync: this,
     );
 
@@ -318,8 +336,8 @@ class _BoardWidgetState extends State<BoardWidget>
   }
 
   void _startBlinkAnimation(Chip chip, Point<int> point) {
-    final duration =
-        const Duration(milliseconds: _ANIM_DURATION_BLINK_HALF * 2);
+    final duration = Duration(
+        milliseconds: _applyAnimationMultiplier(_ANIM_DURATION_BLINK_HALF) * 2);
     final curve = Curves.easeInOut;
 
     void _startScaleAnimation(Chip chip, Point<int> point) {
@@ -386,7 +404,9 @@ class _BoardWidgetState extends State<BoardWidget>
 
   void _startColorOverlayAnimation(Chip chip) {
     final controller = AnimationController(
-      duration: const Duration(milliseconds: _ANIM_DURATION_COLOR_OVERLAY),
+      duration: Duration(
+          milliseconds:
+              _applyAnimationMultiplier(_ANIM_DURATION_COLOR_OVERLAY)),
       vsync: this,
     );
 
@@ -450,6 +470,7 @@ class _BoardWidgetState extends State<BoardWidget>
         onPanCancel: onPanCancel,
         onPanUpdate: onPanUpdate,
         onPanEnd: onPanEnd,
+        onTapDown: onTapDown,
         child: Stack(children: chips),
       ),
     );
@@ -485,7 +506,7 @@ class _BoardWidgetState extends State<BoardWidget>
           chipSize / 3,
           showNumber: widget.showNumbers,
           size: widget.size,
-          onPressed: widget.onTap != null
+          onPressed: widget.onTap != null && !_isSpeedRunModeEnabled
               ? () {
                   widget.onTap(chip.currentPoint);
                 }
@@ -495,10 +516,25 @@ class _BoardWidgetState extends State<BoardWidget>
     );
   }
 
+  void onTapDown(TapDownDetails details) {
+    final board = widget.board;
+
+    if (board == null || chips == null || !_isSpeedRunModeEnabled) {
+      return;
+    }
+
+    _Chip activeChip = _findActiveChip(details.globalPosition);
+    if (activeChip == null) {
+      return;
+    }
+
+    widget.onTap?.call(activeChip.currentPoint);
+  }
+
   void onPanStart(BuildContext context, DragStartDetails details) {
     final board = widget.board;
 
-    if (board == null || chips == null) {
+    if (board == null || chips == null || _isSpeedRunModeEnabled) {
       _onPanUpdateDelegate = null;
       _onPanEndDelegate = null;
       return;
@@ -507,22 +543,7 @@ class _BoardWidgetState extends State<BoardWidget>
     final boardWidgetSize = widget.size;
     final chipWidgetSize = boardWidgetSize / board.size;
 
-    final RenderBox box = context.findRenderObject();
-    final localPos = box.globalToLocal(details.globalPosition);
-    final touchX = localPos.dx;
-    final touchY = localPos.dy;
-
-    _Chip activeChip;
-    for (_Chip chip in chips) {
-      if (chip.x * boardWidgetSize <= touchX &&
-          chip.x * boardWidgetSize + chipWidgetSize >= touchX &&
-          chip.y * boardWidgetSize <= touchY &&
-          chip.y * boardWidgetSize + chipWidgetSize >= touchY) {
-        activeChip = chip;
-        break;
-      }
-    }
-
+    _Chip activeChip = _findActiveChip(details.globalPosition);
     if (activeChip == null) {
       _onPanUpdateDelegate = null;
       _onPanEndDelegate = null;
@@ -661,6 +682,28 @@ class _BoardWidgetState extends State<BoardWidget>
       _onPanEndDelegate = null;
       _onPanUpdateDelegate = null;
     };
+  }
+
+  _Chip _findActiveChip(Offset globalPosition) {
+    final board = widget.board;
+    final boardWidgetSize = widget.size;
+    final chipWidgetSize = boardWidgetSize / board.size;
+
+    final RenderBox box = context.findRenderObject();
+    final localPos = box.globalToLocal(globalPosition);
+    final touchX = localPos.dx;
+    final touchY = localPos.dy;
+
+    for (_Chip chip in chips) {
+      if (chip.x * boardWidgetSize <= touchX &&
+          chip.x * boardWidgetSize + chipWidgetSize >= touchX &&
+          chip.y * boardWidgetSize <= touchY &&
+          chip.y * boardWidgetSize + chipWidgetSize >= touchY) {
+        return chip;
+      }
+    }
+
+    return null;
   }
 
   void onPanCancel() {

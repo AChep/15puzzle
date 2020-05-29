@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fifteenpuzzle/config/ui.dart';
 import 'package:fifteenpuzzle/widgets/game/board.dart';
 import 'package:fifteenpuzzle/widgets/game/material/control.dart';
 import 'package:fifteenpuzzle/widgets/game/material/sheets.dart';
@@ -138,6 +139,7 @@ class GameMaterialPage extends StatelessWidget {
 
   Widget _buildBoard(final BuildContext context) {
     final presenter = GamePresenterWidget.of(context);
+    final config = ConfigUiContainer.of(context);
     final background = Theme.of(context).brightness == Brightness.dark
         ? Colors.black54
         : Colors.black12;
@@ -197,6 +199,7 @@ class GameMaterialPage extends StatelessWidget {
                 presenter.tap(point: tapPoint);
               },
               child: BoardWidget(
+                isSpeedRunModeEnabled: config.isSpeedRunModeEnabled,
                 board: presenter.board,
                 size: puzzleSize,
                 onTap: (point) {

@@ -20,16 +20,21 @@ class ConfigUiContainer extends StatefulWidget {
 
 class _ConfigUiContainerState extends State<ConfigUiContainer> {
   static const _DEFAULT_USE_DARK_THEME = true;
+  static const _DEFAULT_SPEED_RUN_MODE_ENABLED = false;
   static const _KEY_USE_DARK_THEME = 'ui::dark_theme_enabled';
+  static const _KEY_SPEED_RUN_MODE_ENABLED = 'ui::speed_run_mode_enabled';
 
   /// `true` if the app uses a global dark theme,
   /// `false` otherwise.
   bool useDarkTheme;
 
+  bool isSpeedRunModeEnabled;
+
   @override
   void initState() {
     super.initState();
     useDarkTheme = _DEFAULT_USE_DARK_THEME;
+    isSpeedRunModeEnabled = _DEFAULT_SPEED_RUN_MODE_ENABLED;
 
     _loadPreferences();
   }
@@ -42,12 +47,19 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
       return;
     }
     _loadThemePreferences(prefs);
+    _loadSpeedRunPreferences(prefs);
   }
 
   void _loadThemePreferences(final SharedPreferences prefs) {
     final useDarkTheme =
         prefs.getBool(_KEY_USE_DARK_THEME) ?? this.useDarkTheme;
     setUseDarkTheme(useDarkTheme);
+  }
+
+  void _loadSpeedRunPreferences(final SharedPreferences prefs) {
+    final isSpeedRunModeEnabled = prefs.getBool(_KEY_SPEED_RUN_MODE_ENABLED) ??
+        this.isSpeedRunModeEnabled;
+    setUseDarkTheme(isSpeedRunModeEnabled);
   }
 
   /// Sets if user want app to show up in a dark theme or
@@ -65,6 +77,22 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
 
     setState(() {
       this.useDarkTheme = useDarkTheme;
+    });
+  }
+
+  void setSpeedRunModeEnabled(final bool isEnabled,
+      {final bool save = false}) async {
+    // Save the choice if we
+    // want to.
+    if (save) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool(_KEY_SPEED_RUN_MODE_ENABLED, isEnabled);
+      } on Exception {}
+    }
+
+    setState(() {
+      this.isSpeedRunModeEnabled = isEnabled;
     });
   }
 
