@@ -42,7 +42,7 @@ class _BoardWidgetState extends State<BoardWidget>
   static const num _ANIM_DURATION_MULTIPLIER_SPEED_RUN = 0.6;
 
   static const int _ANIM_DURATION_BLINK_HALF = 200;
-  static const int _ANIM_DURATION_MOVE = 400;
+  static const int _ANIM_DURATION_MOVE = 350;
   static const int _ANIM_DURATION_COLOR_BACKGROUND = 200;
   static const int _ANIM_DURATION_COLOR_OVERLAY = 1200;
 
@@ -309,7 +309,7 @@ class _BoardWidgetState extends State<BoardWidget>
     final target = chips[chip.number];
     final animation = CurvedAnimation(
       parent: controller,
-      curve: ElasticOutCurve(1.0),
+      curve: const Cubic(0.175, 0.885, 0.32, 1.125),
     );
 
     final board = widget.board;
