@@ -102,10 +102,21 @@ Widget createMoreBottomSheet(
                     const BorderRadius.all(const Radius.circular(16.0)),
               ),
               onPressed: () {
-                var shouldUseDarkTheme = !config.useDarkTheme;
+                // Cycle themes like this:
+                // Auto -> Dark -> Light -> Auto ...
+                bool shouldUseDarkTheme;
+                if (config.useDarkTheme == null) {
+                  shouldUseDarkTheme = true;
+                } else if (config.useDarkTheme == true) {
+                  shouldUseDarkTheme = false;
+                } else {
+                  shouldUseDarkTheme = null;
+                }
                 config.setUseDarkTheme(shouldUseDarkTheme, save: true);
               },
-              child: Text('Toggle theme'),
+              child: Text(config.useDarkTheme == null
+                  ? 'System theme'
+                  : config.useDarkTheme == true ? 'Dark theme' : 'Light theme'),
             ),
           ),
         ),

@@ -63,42 +63,68 @@ class _MyMaterialApp extends _MyPlatformApp {
   Widget build(BuildContext context) {
     final ui = ConfigUiContainer.of(context);
 
-    // Get current theme from
-    // a global state.
-    final overlay = ui.useDarkTheme
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
-    final theme = ui.useDarkTheme
-        ? ThemeData(
-            brightness: Brightness.dark,
-            canvasColor: Color(0xFF121212),
-            backgroundColor: Color(0xFF121212),
-            cardColor: Color(0xFF1E1E1E),
-          )
-        : ThemeData.light();
+    ThemeData applyDecor(ThemeData theme) => theme.copyWith(
+          primaryColor: Colors.blue,
+          accentColor: Colors.amberAccent,
+          accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
+          dialogTheme: const DialogTheme(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+          ),
+          textTheme: theme.textTheme.apply(fontFamily: 'ManRope'),
+          primaryTextTheme: theme.primaryTextTheme.apply(fontFamily: 'ManRope'),
+          accentTextTheme: theme.accentTextTheme.apply(fontFamily: 'ManRope'),
+        );
 
-    SystemChrome.setSystemUIOverlayStyle(
-      overlay.copyWith(
-        statusBarColor: Colors.transparent,
-      ),
-    );
+    final baseDarkTheme = applyDecor(ThemeData(
+      brightness: Brightness.dark,
+      canvasColor: Color(0xFF121212),
+      backgroundColor: Color(0xFF121212),
+      cardColor: Color(0xFF1E1E1E),
+    ));
+    final baseLightTheme = applyDecor(ThemeData.light());
+
+    ThemeData darkTheme;
+    ThemeData lightTheme;
+    if (ui.useDarkTheme == null) {
+      // auto
+      darkTheme = baseDarkTheme;
+      lightTheme = baseLightTheme;
+    } else if (ui.useDarkTheme == true) {
+      // dark
+      darkTheme = baseDarkTheme;
+      lightTheme = baseDarkTheme;
+    } else {
+      // light
+      darkTheme = baseLightTheme;
+      lightTheme = baseLightTheme;
+    }
 
     return MaterialApp(
       title: title,
-      theme: theme.copyWith(
-        primaryColor: Colors.blue,
-        accentColor: Colors.amberAccent,
-        accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
-        dialogTheme: const DialogTheme(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          ),
-        ),
-        textTheme: theme.textTheme.apply(fontFamily: 'ManRope'),
-        primaryTextTheme: theme.primaryTextTheme.apply(fontFamily: 'ManRope'),
-        accentTextTheme: theme.accentTextTheme.apply(fontFamily: 'ManRope'),
+      darkTheme: darkTheme,
+      theme: lightTheme,
+      home: Builder(
+        builder: (context) {
+          bool useDarkTheme;
+          if (ui.useDarkTheme == null) {
+            var platformBrightness = MediaQuery.of(context).platformBrightness;
+            useDarkTheme = platformBrightness == Brightness.dark;
+          } else {
+            useDarkTheme = ui.useDarkTheme;
+          }
+          final overlay = useDarkTheme
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark;
+          SystemChrome.setSystemUIOverlayStyle(
+            overlay.copyWith(
+              statusBarColor: Colors.transparent,
+            ),
+          );
+          return GamePage();
+        },
       ),
-      home: GamePage(),
     );
   }
 }

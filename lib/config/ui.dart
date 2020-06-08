@@ -19,7 +19,7 @@ class ConfigUiContainer extends StatefulWidget {
 }
 
 class _ConfigUiContainerState extends State<ConfigUiContainer> {
-  static const _DEFAULT_USE_DARK_THEME = true;
+  static const _DEFAULT_USE_DARK_THEME = null;
   static const _DEFAULT_SPEED_RUN_MODE_ENABLED = false;
   static const _KEY_USE_DARK_THEME = 'ui::dark_theme_enabled';
   static const _KEY_SPEED_RUN_MODE_ENABLED = 'ui::speed_run_mode_enabled';
@@ -51,8 +51,7 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
   }
 
   void _loadThemePreferences(final SharedPreferences prefs) {
-    final useDarkTheme =
-        prefs.getBool(_KEY_USE_DARK_THEME) ?? this.useDarkTheme;
+    final useDarkTheme = prefs.getBool(_KEY_USE_DARK_THEME);
     setUseDarkTheme(useDarkTheme);
   }
 
@@ -71,7 +70,11 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
     if (save) {
       try {
         final prefs = await SharedPreferences.getInstance();
-        prefs.setBool(_KEY_USE_DARK_THEME, useDarkTheme);
+        if (useDarkTheme == null) {
+          prefs.remove(_KEY_USE_DARK_THEME);
+        } else {
+          prefs.setBool(_KEY_USE_DARK_THEME, useDarkTheme);
+        }
       } on Exception {}
     }
 
