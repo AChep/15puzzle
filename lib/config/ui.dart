@@ -59,7 +59,7 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
   void _loadSpeedRunPreferences(final SharedPreferences prefs) {
     final isSpeedRunModeEnabled = prefs.getBool(_KEY_SPEED_RUN_MODE_ENABLED) ??
         this.isSpeedRunModeEnabled;
-    setUseDarkTheme(isSpeedRunModeEnabled);
+    setSpeedRunModeEnabled(isSpeedRunModeEnabled);
   }
 
   /// Sets if user want app to show up in a dark theme or
