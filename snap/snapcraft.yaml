@@ -1,0 +1,36 @@
+name: fifteenpuzzle
+adopt-info: fifteenpuzzle
+summary: Game of Fifteen 
+description: |
+  The Game of Fifteen (also called 15-puzzle, Gem Puzzle, Boss Puzzle, Mystic
+  Square and many others) is a sliding puzzle that consists of a frame of
+  numbered square tiles in random order with one tile missing.
+grade: stable
+confinement: strict
+base: core18
+
+architectures:
+  - build-on: amd64
+
+slots:
+  # for GtkApplication registration
+  transporter:
+    interface: dbus
+    bus: session
+    name: com.artemchep.fifteenpuzzle
+
+apps:
+  fifteenpuzzle:
+    command: bin/fifteenpuzzle
+    extensions: [flutter-master]
+
+parts:
+  fifteenpuzzle:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version $(git describe --tags --abbrev=7)
+    build-packages:
+      - git

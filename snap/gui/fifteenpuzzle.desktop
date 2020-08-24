@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Game of Fifteen
+Comment=When the gong goes bong, stop talking!
+Icon=${SNAP}/meta/gui/fifteenpuzzle.png
+Exec=fifteenpuzzle %U
+Terminal=false
+Type=Application
+Categories=Games;
+Keywords=Flutter;Puzzle;
+StartupNotify=false

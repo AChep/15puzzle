@@ -19,6 +19,11 @@ The Game of Fifteen (also called 15-puzzle, Gem Puzzle, Boss Puzzle, Mystic Squa
   <img alt="Try online" vspace="20"
        src="https://github.com/AChep/15puzzle/raw/master/artwork/web_badge.png" height="60" />
 </a>
+<a href="https://snapcraft.io/fifteenpuzzle">
+  <img alt="Get Game of Fifteen for Linux from the Snap Store" vspace="20"
+       src="https://github.com/snapcore/snap-store-badges/raw/master/EN/[EN]-snap-store-white.png" width="182px" />
+</a>
+
 
 Report a bug or request a feature
 ----------------
