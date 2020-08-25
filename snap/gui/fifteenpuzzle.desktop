@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Game of Fifteen
+Comment=The Game of Fifteen is a sliding puzzle game
+Icon=${SNAP}/meta/gui/fifteenpuzzle.png
+Exec=fifteenpuzzle %U
+Terminal=false
+Type=Application
+Categories=Games;
+Keywords=Flutter;Puzzle;
+StartupNotify=false
