@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Game of Fifteen
-Comment=When the gong goes bong, stop talking!
+Comment=The Game of Fifteen is a sliding puzzle game
 Icon=${SNAP}/meta/gui/fifteenpuzzle.png
 Exec=fifteenpuzzle %U
 Terminal=false
