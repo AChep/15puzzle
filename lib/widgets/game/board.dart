@@ -85,8 +85,7 @@ class _BoardWidgetState extends State<BoardWidget>
       return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_SPEED_RUN)
           .toInt();
     } else
-      return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_NORMAL)
-          .toInt();
+      return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_NORMAL).toInt();
   }
 
   @override
@@ -463,18 +462,21 @@ class _BoardWidgetState extends State<BoardWidget>
       );
     }
     final chips = board.chips.map(_buildChipWidget).toList();
-
+    final boardStack = Stack(children: chips);
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: GestureDetector(
-        onPanStart: (DragStartDetails details) => onPanStart(context, details),
-        onPanCancel: onPanCancel,
-        onPanUpdate: onPanUpdate,
-        onPanEnd: onPanEnd,
-        onTapDown: onTapDown,
-        child: Stack(children: chips),
-      ),
+      child: widget.onTap != null
+          ? GestureDetector(
+              onPanStart: (DragStartDetails details) =>
+                  onPanStart(context, details),
+              onPanCancel: onPanCancel,
+              onPanUpdate: onPanUpdate,
+              onPanEnd: onPanEnd,
+              onTapDown: onTapDown,
+              child: boardStack,
+            )
+          : boardStack,
     );
   }
 
