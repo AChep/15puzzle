@@ -192,7 +192,10 @@ class PlayGamesPlugin(
                                 RC_SIGN_IN -> {
                                     val result =
                                         Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-                                    if (result.isSuccess) {
+                                    if (result == null) {
+                                        val throwable = IllegalStateException()
+                                        continuation.cancel(throwable)
+                                    } else if (result.isSuccess) {
                                         continuation.resume(result.signInAccount!!)
                                     } else {
                                         val message =
