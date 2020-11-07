@@ -23,6 +23,8 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+    - name: install NDK
+      run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
     - id: vars
       run: echo ::set-output name=tag::${GITHUB_REF:10}
     - uses: subosito/flutter-action@v1
