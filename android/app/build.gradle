@@ -83,8 +83,8 @@ android {
         playstore {
             dimension "app"
             dependencies {
-                implementation "com.google.android.gms:play-services-games:19.0.0"
-                implementation "com.google.android.gms:play-services-auth:17.0.0"
+                implementation "com.google.android.gms:play-services-games:20.0.1"
+                implementation "com.google.android.gms:play-services-auth:18.1.0"
             }
         }
         opensource {
