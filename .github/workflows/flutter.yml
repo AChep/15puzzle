@@ -80,3 +80,9 @@ jobs:
         asset_path: build/app/outputs/bundle/playStoreRelease/app-playStore-release.aab
         asset_name: 15puzzle-android-${{ steps.vars.outputs.tag }}.aab
         asset_content_type: application/zip
+    - name: upload to play store
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT }}
+        packageName: com.artemchep.fifteenpuzzle
+        releaseFile: build/app/outputs/bundle/playStoreRelease/app-playStore-release.aab
