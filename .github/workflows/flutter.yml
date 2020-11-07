@@ -47,7 +47,7 @@ jobs:
     - name: Build
       run: |
         flutter build web
-        flutter build appbundle --release --flavor=playStore
+        flutter build appbundle --release --flavor=playstore
     - name: Compress web
       run: |
         cd build
@@ -85,7 +85,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/bundle/playStoreRelease/app-playStore-release.aab
+        asset_path: build/app/outputs/bundle/playstoreRelease/app-playstore-release.aab
         asset_name: 15puzzle-android-${{ steps.vars.outputs.tag }}.aab
         asset_content_type: application/zip
     - name: upload to play store
@@ -93,4 +93,4 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT }}
         packageName: com.artemchep.fifteenpuzzle
-        releaseFile: build/app/outputs/bundle/playStoreRelease/app-playStore-release.aab
+        releaseFile: build/app/outputs/bundle/playstoreRelease/app-playstore-release.aab
