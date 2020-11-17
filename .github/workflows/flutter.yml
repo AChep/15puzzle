@@ -23,9 +23,17 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+    - name: cache NDK
+      id: cache-ndk
+      uses: actions/cache@v2
+      with:
+        path: ${ANDROID_HOME}/ndk
+        key: cache-ndk-20.0.5594570-21.0.6113669
     - name: install NDK 20.0.5594570
+      if: steps.cache-ndk.outputs.cache-hit != 'true'
       run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
     - name: install NDK 21.0.6113669
+      if: steps.cache-ndk.outputs.cache-hit != 'true'
       run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
     - id: vars
       run: echo ::set-output name=tag::${GITHUB_REF:10}
