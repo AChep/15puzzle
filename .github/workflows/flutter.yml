@@ -39,8 +39,8 @@ jobs:
       run: echo ::set-output name=tag::${GITHUB_REF:10}
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '1.24.x'
-        channel: 'dev'
+        flutter-version: '2.0.x'
+        channel: 'beta'
     - name: Copy secrets
       run: |
         cd android/app
