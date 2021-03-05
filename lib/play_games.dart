@@ -32,8 +32,8 @@ class PlayGamesContainer extends StatefulWidget {
   PlayGamesContainer({@required this.child});
 
   static _PlayGamesContainerState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
-            as _InheritedStateContainer)
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedStateContainer>()
         .data;
   }
 

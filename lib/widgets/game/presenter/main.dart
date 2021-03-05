@@ -19,8 +19,8 @@ class GamePresenterWidget extends StatefulWidget {
   GamePresenterWidget({@required this.child, this.onSolve});
 
   static GamePresenterWidgetState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
-            as _InheritedStateContainer)
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedStateContainer>()
         .data;
   }
 
