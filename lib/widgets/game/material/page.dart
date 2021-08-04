@@ -173,16 +173,16 @@ class GameMaterialPage extends StatelessWidget {
                 int offsetX = 0;
                 switch (event.logicalKey.keyId) {
                   case 0x100070052: // arrow up
-                    offsetY = -1;
+                    offsetY = 1;
                     break;
                   case 0x100070050: // arrow left
-                    offsetX = -1;
-                    break;
-                  case 0x10007004f: // arrow right
                     offsetX = 1;
                     break;
+                  case 0x10007004f: // arrow right
+                    offsetX = -1;
+                    break;
                   case 0x100070051: // arrow down
-                    offsetY = 1;
+                    offsetY = -1;
                     break;
                   default:
                     return;
