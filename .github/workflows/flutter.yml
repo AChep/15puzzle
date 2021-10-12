@@ -99,7 +99,7 @@ jobs:
         asset_name: 15puzzle-android-${{ steps.vars.outputs.tag }}.aab
         asset_content_type: application/zip
     - name: upload to play store
-      uses: r0adkll/upload-google-play@v1
+      uses: r0adkll/upload-google-play@v1.0.15
       with:
         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT }}
         packageName: com.artemchep.fifteenpuzzle
