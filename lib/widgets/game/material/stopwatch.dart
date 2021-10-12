@@ -107,9 +107,9 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
               timeStrAtStartOfMinute,
               timeStr,
               maxLines: 1,
-              style: Theme.of(context).textTheme.display3.copyWith(
+              style: Theme.of(context).textTheme.headline5.copyWith(
                     fontSize: widget.fontSize,
-                    color: Theme.of(context).textTheme.title.color,
+                    color: Theme.of(context).textTheme.headline6.color,
                   ),
             ),
           ),

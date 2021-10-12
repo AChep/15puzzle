@@ -1,8 +1,7 @@
-import 'package:fifteenpuzzle/data/chip.dart';
 import 'package:flutter/material.dart' hide Chip;
 
 class ChipWidget extends StatelessWidget {
-  final Chip chip;
+  final String text;
 
   final Function onPressed;
 
@@ -14,16 +13,13 @@ class ChipWidget extends StatelessWidget {
 
   final double size;
 
-  final bool showNumber;
-
   ChipWidget(
-    this.chip,
+    this.text,
     this.overlayColor,
     this.backgroundColor,
     this.fontSize, {
     @required this.onPressed,
     @required this.size,
-    this.showNumber = true,
   });
 
   @override
@@ -38,26 +34,29 @@ class ChipWidget extends StatelessWidget {
     color = Color.alphaBlend(backgroundColor, color);
     color = Color.alphaBlend(overlayColor, color);
 
-    return Padding(
-      padding: EdgeInsets.all(isCompact ? 2.0 : 4.0),
-      child: Material(
-        shape: shape,
-        color: color,
-        elevation: 1,
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: shape,
-          child: showNumber
-              ? Center(
-                  child: Text(
-                    '${chip.number + 1}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: fontSize,
+    return Semantics(
+      label: "",
+      child: Padding(
+        padding: EdgeInsets.all(isCompact ? 2.0 : 4.0),
+        child: Material(
+          shape: shape,
+          color: color,
+          elevation: 1,
+          child: InkWell(
+            onTap: onPressed,
+            customBorder: shape,
+            child: text != null
+                ? Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: fontSize,
+                      ),
                     ),
-                  ),
-                )
-              : null,
+                  )
+                : null,
+          ),
         ),
       ),
     );

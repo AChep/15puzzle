@@ -29,34 +29,44 @@ Widget createMoreBottomSheet(
                     : Colors.black12,
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: InkWell(
-                onTap: () {
-                  call(size);
-                  Navigator.of(context).pop();
-                },
-                child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    final puzzleSize = min(
-                      min(
-                        constraints.maxWidth,
-                        constraints.maxHeight,
-                      ),
-                      96.0,
-                    );
-
-                    return BoardWidget(
-                      board: Board.createNormal(size),
-                      onTap: null,
-                      showNumbers: false,
-                      size: puzzleSize,
-                    );
+              child: Semantics(
+                label: '${size}x$size',
+                child: InkWell(
+                  onTap: () {
+                    call(size);
+                    Navigator.of(context).pop();
                   },
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      final puzzleSize = min(
+                        min(
+                          constraints.maxWidth,
+                          constraints.maxHeight,
+                        ),
+                        96.0,
+                      );
+
+                      return Semantics(
+                        excludeSemantics: true,
+                        child: BoardWidget(
+                          board: Board.createNormal(size),
+                          onTap: null,
+                          showNumbers: false,
+                          size: puzzleSize,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Text('${size}x$size'),
+            Semantics(
+              excludeSemantics: true,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text('${size}x$size'),
+              ),
             ),
           ],
         ),
@@ -71,7 +81,10 @@ Widget createMoreBottomSheet(
       children: <Widget>[
         SizedBox(width: 4),
         IconButton(
-          icon: const Icon(Icons.info_outline),
+          icon: const Icon(
+            Icons.info_outline,
+            semanticLabel: "Info",
+          ),
           onPressed: () {
             Navigator.of(context).pop();
             showDialog(
@@ -83,7 +96,10 @@ Widget createMoreBottomSheet(
         ),
         if (platformCheck(() => Platform.isAndroid || Platform.isIOS))
           IconButton(
-            icon: const Icon(Icons.credit_card),
+            icon: const Icon(
+              Icons.credit_card,
+              semanticLabel: "Donations",
+            ),
             onPressed: () {
               Navigator.of(context).pop();
               showDialog(
@@ -116,7 +132,9 @@ Widget createMoreBottomSheet(
               },
               child: Text(config.useDarkTheme == null
                   ? 'System theme'
-                  : config.useDarkTheme == true ? 'Dark theme' : 'Light theme'),
+                  : config.useDarkTheme == true
+                      ? 'Dark theme'
+                      : 'Light theme'),
             ),
           ),
         ),

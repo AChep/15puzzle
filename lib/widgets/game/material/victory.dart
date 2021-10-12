@@ -54,7 +54,7 @@ class GameVictoryDialog extends StatelessWidget {
       title: Center(
         child: Text(
           "Congratulations!",
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline5,
         ),
       ),
       content: Column(
@@ -76,8 +76,8 @@ class GameVictoryDialog extends StatelessWidget {
                   ),
                   Text(
                     timeFormatted,
-                    style: Theme.of(context).textTheme.display1.copyWith(
-                          color: Theme.of(context).textTheme.body1.color,
+                    style: Theme.of(context).textTheme.headline3.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1.color,
                         ),
                   ),
                 ],
@@ -92,8 +92,8 @@ class GameVictoryDialog extends StatelessWidget {
                   ),
                   Text(
                     '${result.steps}',
-                    style: Theme.of(context).textTheme.display1.copyWith(
-                          color: Theme.of(context).textTheme.body1.color,
+                    style: Theme.of(context).textTheme.headline3.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1.color,
                         ),
                   ),
                 ],

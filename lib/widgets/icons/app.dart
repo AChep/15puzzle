@@ -8,20 +8,23 @@ class AppIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = this.size ?? IconTheme.of(context).size;
-    return Container(
-      width: size,
-      height: size,
-      child: Material(
-        shape: CircleBorder(),
-        elevation: 4.0,
-        color: Theme.of(context).primaryColor,
-        child: Center(
-          child: Text(
-            '15',
-            style: Theme.of(context).primaryTextTheme.title.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                ),
+    return Semantics(
+      excludeSemantics: true,
+      child: Container(
+        width: size,
+        height: size,
+        child: Material(
+          shape: CircleBorder(),
+          elevation: 4.0,
+          color: Theme.of(context).primaryColor,
+          child: Center(
+            child: Text(
+              '15',
+              style: Theme.of(context).primaryTextTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0,
+                  ),
+            ),
           ),
         ),
       ),

@@ -76,6 +76,7 @@ class _GamePlayStopButtonState extends State<GamePlayStopButton>
 
     return FloatingActionButton(
       backgroundColor: backgroundColor,
+      tooltip: widget.isPlaying ? "Stop" : "Play",
       onPressed: () => widget.onTap?.call(),
       child: Stack(
         children: <Widget>[

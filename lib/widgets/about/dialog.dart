@@ -57,9 +57,12 @@ class AboutDialog extends StatelessWidget {
               text = 'Game of Fifteen, web version';
             }
             return HorizontalPadding(
-              Text(
-                text,
-                style: Theme.of(context).textTheme.caption,
+              Semantics(
+                label: "App version",
+                child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
             );
           },

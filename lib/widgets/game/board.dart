@@ -461,7 +461,20 @@ class _BoardWidgetState extends State<BoardWidget>
         ),
       );
     }
+    final blank = _buildChipWidgetSkeleton(
+      x: board.blank.x.toDouble() / board.size.toDouble(),
+      y: board.blank.y.toDouble() / board.size.toDouble(),
+      scale: 1.0,
+      chip: (chipSize) => Semantics(
+        label: "",
+        child: Text(
+          "Blank space",
+          style: TextStyle(color: Colors.transparent),
+        ),
+      ),
+    );
     final chips = board.chips.map(_buildChipWidget).toList();
+    chips.add(blank);
     final boardStack = Stack(children: chips);
     return SizedBox(
       width: widget.size,
@@ -495,27 +508,41 @@ class _BoardWidgetState extends State<BoardWidget>
     final backgroundColor =
         extra.backgroundColor.withOpacity(dst < 1 ? 1 - dst : 0);
 
+    return _buildChipWidgetSkeleton(
+      x: extra.x,
+      y: extra.y,
+      scale: extra.scale,
+      chip: (chipSize) => ChipWidget(
+        widget.showNumbers ? "${chip.number + 1}" : null,
+        overlayColor,
+        backgroundColor,
+        chipSize / 3,
+        size: widget.size,
+        onPressed: widget.onTap != null && !_isSpeedRunModeEnabled
+            ? () {
+                widget.onTap(chip.currentPoint);
+              }
+            : null,
+      ),
+    );
+  }
+
+  Widget _buildChipWidgetSkeleton({
+    double x,
+    double y,
+    double scale,
+    Widget Function(double) chip,
+  }) {
+    final board = widget.board;
     final chipSize = widget.size / board.size;
     return Positioned(
       width: chipSize,
       height: chipSize,
-      left: extra.x * widget.size,
-      top: extra.y * widget.size,
+      left: x * widget.size,
+      top: y * widget.size,
       child: Transform.scale(
-        scale: extra.scale,
-        child: ChipWidget(
-          chip,
-          overlayColor,
-          backgroundColor,
-          chipSize / 3,
-          showNumber: widget.showNumbers,
-          size: widget.size,
-          onPressed: widget.onTap != null && !_isSpeedRunModeEnabled
-              ? () {
-                  widget.onTap(chip.currentPoint);
-                }
-              : null,
-        ),
+        scale: scale,
+        child: chip(chipSize),
       ),
     );
   }

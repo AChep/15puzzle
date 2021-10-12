@@ -17,7 +17,7 @@ class _GameStepsState extends State<GameStepsWidget> {
   Widget build(BuildContext context) {
     return Text(
       '${widget.steps} steps',
-      style: Theme.of(context).textTheme.subtitle,
+      style: Theme.of(context).textTheme.subtitle1,
     );
   }
 }

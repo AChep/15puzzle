@@ -78,7 +78,7 @@ class GameMaterialPage extends StatelessWidget {
                               const SizedBox(width: 16.0),
                               Text(
                                 'Game of Fifteen',
-                                style: Theme.of(context).textTheme.title,
+                                style: Theme.of(context).textTheme.headline6,
                               ),
                             ],
                           ),
@@ -230,7 +230,10 @@ class GameMaterialPage extends StatelessWidget {
                 presenter.reset();
               },
               customBorder: CircleBorder(),
-              child: Icon(Icons.refresh),
+              child: Icon(
+                Icons.refresh,
+                semanticLabel: "Reset",
+              ),
             ),
           ),
         ),
@@ -264,7 +267,10 @@ class GameMaterialPage extends StatelessWidget {
                 );
               },
               customBorder: CircleBorder(),
-              child: Icon(Icons.more_vert),
+              child: Icon(
+                Icons.more_vert,
+                semanticLabel: "Settings",
+              ),
             ),
           ),
         ),
