@@ -36,7 +36,7 @@ jobs:
       if: steps.cache-ndk.outputs.cache-hit != 'true'
       run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
     - id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF:10}
+      run: echo tag=${GITHUB_REF:10} >> $GITHUB_OUTPUT
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.8.x'
